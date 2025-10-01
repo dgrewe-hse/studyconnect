@@ -13,4 +13,3 @@ Warum: Ist uns bereits aus der SW-Architektur-VL bekannt.
 
 Gruppenorganisation:
 Wir haben eine Webexgruppe erstellt und werden zusätzlich die Laboraufgaben immer Mittwochs nach der Vorlesung in der Gruppe verteilen.
-Test123
