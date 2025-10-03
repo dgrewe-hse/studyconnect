@@ -40,22 +40,6 @@ The goal of **StudyConnect** is to provide students with a simple tool to manage
 
 ---
 
-## Testing Strategy
-- **Unit Testing:**
-  - Backend: Jest + Nest TestingModule with SQLite in-memory.
-  - Frontend: Vitest + React Testing Library.
-- **Integration Testing:**
-  - Supertest for API endpoints.
-  - SQLite or PostgreSQL test container for DB integration.
-- **End-to-End Testing:**
-  - Playwright or Cypress for UI flows (login, task creation, overdue state).
-- **Static Testing:**
-  - ESLint, Prettier, Husky + lint-staged.
-- **CI/CD Integration:**
-  - GitHub Actions: run migrations, build, and test pipelines.
-
----
-
 ## Project Organization
 - **Monorepo structure** (optional, using Turborepo):
 /apps
