@@ -88,3 +88,4 @@ Our chosen stack **Next.js + NestJS + PostgreSQL** supports every topic planned 
 - Continuous Integration and code quality practices
 
 This ensures that each development stage can be tested and documented according to the **Software Testing Lab** requirements, demonstrating our understanding of both implementation and software quality assurance.
+
