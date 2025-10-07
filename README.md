@@ -19,6 +19,19 @@ StudyConnect is a teaching project developed during the Software Testing course 
 
 For additional background and high-level expectations, see the detailed concept document in `docs/study_connect_app.md`.
 
+### Running the Project
+
+To set up and run both the frontend and backend locally, please follow the detailed instructions in  
+👉 [`doc/project-setup.md`](doc/project-setup.md)
+
+This file includes:
+- Environment and Docker setup  
+- Backend (NestJS + PostgreSQL) configuration  
+- Frontend (Next.js) installation and start commands  
+
+Ensure you have **Node.js v20+** and **Docker Desktop** installed before starting.
+
+
 ### Course Context and Objectives
 - Learn and apply practical techniques in software testing across the development lifecycle
 - Practice requirements engineering, collaboration, code reviews, and quality assurance
