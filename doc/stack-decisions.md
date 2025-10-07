@@ -7,6 +7,12 @@
 
 ---
 
+## Repository Links
+- **Main Repository:** [https://github.com/Ricardo0919/studyconnect-software-testing](https://github.com/Ricardo0919/studyconnect-software-testing)  
+- **This Document (Stack Decisions):** [https://github.com/Ricardo0919/studyconnect-software-testing/blob/main/doc/stack-decisions.md](https://github.com/Ricardo0919/studyconnect-software-testing/blob/main/doc/stack-decisions.md)
+
+---
+
 ## Overview
 The goal of **StudyConnect** is to provide students with a simple tool to manage tasks, collaborate in groups, and keep track of progress. Since the course emphasizes **software testing** and a clear **3-tier architecture**, our team selected technologies that balance ease of use, strong testing support, and scalability.
 
