@@ -8,39 +8,46 @@ organize task
 ### Summary: 
 Short descriptive summary 2-4 sentences.
 
-    <Text goes here>
+a user created task is put in a category by the user himself. category may for example be "exam preparation" or "mathematics"
 
 ### Actor:
 The actor initiating the use case.
 
-    <Text goes here>
+    User
 
 ### Triggering Event:
 Describing the event that starts the use case.
 
-    <Text goes here>
+    User selects a categorie for an existing task
 
 ### Inputs:
 Describing the information, inputs the system requires from outside.
 
-    <Text goes here>
+    name of the category
+    available categories
 
 ### Pre-Conditions:
 Describing the preconditions that must be met to trigger the use case.
 
-    <Text goes here>
+    user is logged in
+    task is created
 
 ### Process Description:
 Describing the normal process flow of the use case.
 
-    <Text goes here>
+    user opens task
+    user selects category for this specific task
 
 ### Exceptions:
 Describing exceptions to the normal process.
 
-    <Text goes here>
+    
+### Extensions:
 
+    category does not exist and must be created
+    
 ### Outputs and Post-Conditions:
 The result of the process and the conditions that must be met after the process has been executed.
 
-    <Text goes here>
+    task is categorized
+    user can see the category when viewing the task
