@@ -49,5 +49,5 @@ These requirements ensure the application supports the user's broader academic w
 
 | **ID** | **Requirement** | **Source** |
 |:-------|:----------------|:------------|
-| FSR-D.1 | The system must allow the user to export their plans and schedules in PDF format. | PDF Export |
-| FSR-D.2 | The system must allow the user to export their plans and schedules in ICS calendar file format for integration with external calendars. | ICS Export |
+| FSR-D.1 | The system must allow the user to export their plans and schedules in PDF format Or in ICS calendar file format for integration with external calendars. | PDF/ICS Export |
+
