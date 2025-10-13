@@ -30,6 +30,6 @@ The first and most important one is automated testing: With an automated CI pipe
 A modular architecture will be adopted separating interfaces, logic and data layers to enable isolated unit testing.
 To ensure reproducibility, a dedicated test environment will be used.
 
-Furthermore, structured logging as well as the use of naming conventions and coding guidelines will imporve testability by making it easier to trace errors.
+Furthermore, structured logging as well as the use of naming conventions and coding guidelines will improve testability by making it easier to trace errors.
 
 These measures can ensure that test criteria can be defined clearly and that tests can be executed effectively and efficiently.
