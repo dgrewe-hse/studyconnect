@@ -66,7 +66,6 @@ Group Admin: Manages memberships, assigns tasks, moderates activities.
 
 ---
 
-markdown
 # StudyConnect – Use Case Diagram (Task Management)
 
 ## Scope
@@ -130,7 +129,6 @@ Extends: Editing tasks includes changing status.
 
 ---
 
-markdown
 # StudyConnect – Use Case Descriptions
 
 ---
