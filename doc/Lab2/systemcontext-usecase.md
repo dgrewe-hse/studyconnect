@@ -6,28 +6,48 @@ It also highlights the internal architecture layers (frontend, backend, database
 
 ```mermaid
 flowchart LR
-  subgraph External
-    U[Student]
-    A[Group Admin]
-    CAL[Calendar App]
-    MAIL[Mail/Push Service]
-    PDF[PDF Viewer]
+
+  linkStyle default stroke-width:1.5px,stroke:#94a3b8
+
+  subgraph EXT[External]
+    direction TB
+    student([Student])
+    admin([Group Admin])
+    cal[[Calendar App<br/>]]
+    mail[[Mail / Push Service]]
+    pdf[[PDF Viewer]]
   end
 
-  subgraph StudyConnect
-    FE[Frontend\nNext.js]
-    BE[Backend\nNestJS ]
-    DB[(PostgreSQL Database\nTypeORM ORM)]
+  subgraph SYS[StudyConnect]
+    direction LR
+    fe[Frontend<br/>Next.js ]
+    be[Backend<br/>NestJS ]
+    db[(PostgreSQL<br/>TypeORM)]
   end
 
-  U <--> FE
-  A <--> FE
-  FE <--> BE
-  BE <--> DB
+  student --> fe
+  admin --> fe
 
-  BE -- Export ICS --> CAL
-  BE -- Export PDF --> PDF
-  BE -- Reminder Notifications --> MAIL
+  fe <--> be
+  be --> db
+
+  be -- Export ICS --> cal
+  be -- Reminder Notifications --> mail
+  be -- Export PDF --> pdf
+
+  student -. uses .- admin
+  cal -. external .- mail
+  mail -. external .- pdf
+
+  classDef actor       fill:#e0f2fe,stroke:#0ea5e9,color:#0c4a6e,stroke-width:1.2px;
+  classDef external    fill:#f1f5f9,stroke:#475569,color:#0f172a,stroke-width:1.2px;
+  classDef internal    fill:#eef2ff,stroke:#6366f1,color:#111827,stroke-width:1.2px;
+  classDef database    fill:#fff7ed,stroke:#ea580c,color:#7c2d12,stroke-width:1.2px;
+
+  class student,admin actor
+  class cal,mail,pdf external
+  class fe,be internal
+  class db database
 ```
 
 Explanation
@@ -55,44 +75,52 @@ markdown
 This diagram focuses on the **Task Management** feature of StudyConnect, which enables students to create, update, and track tasks individually or within groups.
 
 ```mermaid
-flowchart TD
-  %% Actors
-  actorUser([Student])
-  actorAdmin([Group Admin])
-  actorCron([System Timer / Cron])
+flowchart TB
+  linkStyle default stroke-width:1.4px,stroke:#64748b
 
-  %% Use Cases
-  UC1((Create Task))
-  UC2((Edit Task))
-  UC3((Change Task Status))
-  UC4((Categorize Task))
-  UC5((Set Deadline))
-  UC6((Add Comment))
-  UC7((View Tasks))
-  UC8((Highlight Overdue Tasks))
-  UC9((Assign Task to Member))
-  UC10((Export as PDF/ICS))
+  student[Student]
+  admin[Group Admin]
+  cron[System Timer / Cron]
 
-  %% Relationships
-  actorUser --> UC1
-  actorUser --> UC2
-  actorUser --> UC3
-  actorUser --> UC4
-  actorUser --> UC5
-  actorUser --> UC6
-  actorUser --> UC7
-  actorUser --> UC8
-  actorUser --> UC10
+  UC_Create[Create Task]
+  UC_Deadline[Set Deadline]
+  UC_Categorize[Categorize Task]
+  UC_Edit[Edit Task]
+  UC_Change[Change Task Status]
 
-  actorAdmin --> UC9
-  actorAdmin --> UC7
+  UC_Comment[Add Comment]
+  UC_View[View Tasks]
+  UC_Overdue[Highlight Overdue Tasks]
 
-  actorCron --> UC8
+  UC_Assign[Assign Task to Member]
+  UC_Export[Export as PDF/ICS]
 
-  %% include/extend notes
-  UC1 ---|"include"| UC5
-  UC1 ---|"include"| UC4
-  UC2 ---|"extend"| UC3
+  student --> UC_Create
+  student --> UC_Edit
+  student --> UC_Change
+  student --> UC_Categorize
+  student --> UC_Deadline
+  student --> UC_Comment
+  student --> UC_View
+  student --> UC_Overdue
+  student --> UC_Export
+
+  admin --> UC_Assign
+  admin --> UC_View
+  admin --> UC_Export
+
+  cron --> UC_Overdue
+
+  UC_Create -. includes .-> UC_Deadline
+  UC_Create -. includes .-> UC_Categorize
+  UC_Edit   -. extends  .-> UC_Change
+
+  classDef actor fill:#e0f2fe,stroke:#0ea5e9,color:#0c4a6e,stroke-width:1.2px;
+  classDef uc fill:#f8fafc,stroke:#0891b2,color:#083344,stroke-width:1.2px;
+
+  class student,admin,cron actor
+  class UC_Create,UC_Edit,UC_Change,UC_Categorize,UC_Deadline,UC_Comment,UC_View,UC_Overdue,UC_Assign,UC_Export uc
+
 ```
 Description
 Primary actor: Student
