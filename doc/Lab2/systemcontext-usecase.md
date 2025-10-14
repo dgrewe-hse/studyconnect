@@ -28,6 +28,7 @@ flowchart LR
   BE -- Export ICS --> CAL
   BE -- Export PDF --> PDF
   BE -- Reminder Notifications --> MAIL
+```
 
 Explanation
 
@@ -92,7 +93,7 @@ flowchart TD
   UC1 ---|"include"| UC5
   UC1 ---|"include"| UC4
   UC2 ---|"extend"| UC3
-
+```
 Description
 Primary actor: Student
 Secondary actors: Group Admin, System Timer (Cron)
@@ -105,7 +106,7 @@ Extends: Editing tasks includes changing status.
 
 ## 📄 **`docs/use_cases/use_case_descriptions.md`**
 
-```markdown
+markdown
 # StudyConnect – Use Case Descriptions
 
 ---
