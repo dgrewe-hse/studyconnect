@@ -15,8 +15,8 @@ flowchart LR
   end
 
   subgraph StudyConnect
-    FE[Frontend\nNext.js (TypeScript)]
-    BE[Backend\nNestJS (TypeScript, REST API, RBAC)]
+    FE[Frontend\nNext.js]
+    BE[Backend\nNestJS ]
     DB[(PostgreSQL Database\nTypeORM ORM)]
   end
 
