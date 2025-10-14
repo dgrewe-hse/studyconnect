@@ -9,7 +9,7 @@ flowchart LR
   subgraph External
     U[Student]
     A[Group Admin]
-    CAL[Calendar App (ICS Export)]
+    CAL[Calendar App]
     MAIL[Mail/Push Service]
     PDF[PDF Viewer]
   end
