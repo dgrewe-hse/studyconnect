@@ -1,4 +1,4 @@
-# UX Factors
+# UX Factors Overview
 
 ## How we ranked
 
