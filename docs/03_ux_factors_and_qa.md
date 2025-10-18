@@ -55,3 +55,63 @@ Humans are lazy. Therefore, we prefer to perform important actions with the leas
 Of all selected factors, almost all group members ranked appearance/attractiveness towards the bottom. One possible explanation is the fact that as a software engineer student we all view things mostly from a technical perspective and, maybe neglecting design elements to a certain degree.
 
 However, appearance is still considered an important factor. The SquirrelMail program used at Hochschule Esslingen is a prime negative example. Although it has all the functions required of a simple webmail application, due to it's outdated look and feel it is not very popular among many students. 
+
+
+
+
+## 3.2 Emotional Response <--> UX Factor Mapping
+
+---
+---
+---
+---
+---
+---
+---
+---
+---
+
+
+
+## 3.3 UX Factor Analysis for StudyConnect
+
+### 1. UX Factor: Appearance / Attractiveness
+
+| **Aspect** | **Description** |
+|:------------|:----------------|
+| **Importance** | An attractive interface boosts user motivation and engagement, aligning with StudyConnect's goal to offer *motivational elements*. A pleasant design encourages consistent daily use. |
+| **Design Support** | Use appealing color coding for tasks and progress, and ensure gamification elements are visually rewarding. A clean, uncluttered layout supports the *Simplicity and Usability* expectation. |
+| **Risk if Ignored** | Users may perceive the app as outdated or unengaging, leading to low adoption rates and a preference for competing, better-designed tools. This risks the app's overall utility and user base. |
+
+---
+
+### 2. UX Factor: Controllability / Dependability
+
+| **Aspect** | **Description** |
+|:------------|:----------------|
+| **Importance** | Students critically depend on StudyConnect for accurate deadlines, priorities, and group assignments, making consistent and predictable responses essential. Any deviation directly impacts their ability to manage academic responsibilities. |
+| **Design Support** | Implement consistent navigation and clear feedback for all user actions across platforms. Precise *Role- and Permission Management* ensures users only interact with authorized functionalities. |
+| **Risk if Ignored** | Inconsistent behavior or errors lead to user frustration, potentially causing missed deadlines or confusion in group work. Users will lose trust in the app's ability to reliably manage their academic life. |
+
+---
+
+### 3. UX Factor: Trust / Credibility
+
+| **Aspect** | **Description** |
+|:------------|:----------------|
+| **Importance** | Trust is paramount for StudyConnect, as users store personal academic plans and collaborate on group work. Students need assurance that their data is secure, private, and correctly managed. |
+| **Design Support** | Ensure transparency regarding data usage and access, especially within group settings (aligned with *Role- and Permission Management*). A professional, error-free application builds a foundation of reliability and trustworthiness. |
+| **Risk if Ignored** | Users will hesitate to input sensitive academic information if they doubt the app's security or reliability. This lack of trust will lead to low engagement and a potential abandonment of the application. |
+
+---
+
+### 4. UX Factor: Intuitive Operation
+
+| **Aspect** | **Description** |
+|:------------|:----------------|
+| **Importance** | Crucial because students have limited time and require tools that are simple and immediately understandable. An intuitive interface allows them to quickly focus on learning, not on managing the tool. |
+| **Design Support** | This can be achieved through a clear structure, consistent navigation, and immediate visual feedback. A reduced UI and an “undo” function also enhance ease of use and error recovery. |
+| **Risk if Ignored** | Users will experience frustration and make errors, leading to low adoption and infrequent use. This ultimately diminishes the app’s perceived value and effectiveness. |
+
+
+### 5. UX Factor: Efficiency 
