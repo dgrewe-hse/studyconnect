@@ -61,15 +61,16 @@ However, appearance is still considered an important factor. The SquirrelMail pr
 
 ## 3.2 Emotional Response <--> UX Factor Mapping
 
----
----
----
----
----
----
----
----
----
+| **Emotional Reactions** | **UX Factor** |
+|:-----------------------|:--------------|
+| "That is exactly what I needed." | Completeness |
+| "It makes life easier." | Convenience |
+| "I'm in control." or "I am the boss." | Controllability |
+| "We know each other." | Social/Identity |
+| "Not being alone." | Social |
+| "Wow." | Beauty |
+| "Something went wrong." | Controllability |
+| "I've never seen anything like this before." | Originality |
 
 
 
@@ -115,3 +116,9 @@ However, appearance is still considered an important factor. The SquirrelMail pr
 
 
 ### 5. UX Factor: Efficiency 
+
+| **Aspect** | **Description** |
+|:------------|:----------------|
+| **Importance** | Very high. Application should not be frustrating to use and or waste time of user. |
+| **Design Support** | The most important features should be reached with a single click. If the rule gets broken think about another way to achieve the goal. If not possible use workarounds e.q. shortcut links/keys. |
+| **Risk if Ignored** | The user will feel very frustrated when using the application. Using the application will feel like another task they have to do -> User does not enjoy using the application -> User loses interest and or searches for replacement application. |
