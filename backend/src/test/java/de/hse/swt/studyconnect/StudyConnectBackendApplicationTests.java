@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.studyconnect.backend;
+package de.hse.swt.studyconnect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

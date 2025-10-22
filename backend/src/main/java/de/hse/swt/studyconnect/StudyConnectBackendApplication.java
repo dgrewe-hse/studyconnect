@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.studyconnect.backend;
+package de.hse.swt.studyconnect;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

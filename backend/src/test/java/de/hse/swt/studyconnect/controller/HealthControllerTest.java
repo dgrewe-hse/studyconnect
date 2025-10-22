@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package com.studyconnect.backend.controller;
+package de.hse.swt.studyconnect.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
