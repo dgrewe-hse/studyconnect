@@ -13,6 +13,10 @@
 .Trashes
 .fseventsd
 *.icloud
+venv
+node_modules
+__pycache__
+.env
 
 # ------------------------------
 # Windows system files
@@ -23,7 +27,6 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 System Volume Information/
-
 # ------------------------------
 # Common IDEs and editors
 # ------------------------------

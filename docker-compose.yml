@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14.5
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: StudyConnect
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro # optional SQL scripts
+    ports:
+      - "5432:5432"
+    networks:
+      - appnetwork
+
+  pgadmin:
+    image: dpage/pgadmin4:8.12
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8085:80"
+    networks:
+      - appnetwork
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+  keycloak:
+    image: bitnami/keycloak:26.0.6
+    container_name: keycloak
+    environment:
+      KEYCLOAK_DATABASE_HOST: db
+      KEYCLOAK_DATABASE_USER: root
+      KEYCLOAK_DATABASE_PASSWORD: root
+      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - appnetwork
+
+  app:
+    build: .
+    container_name: python_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - keycloak
+    environment:
+      DATABASE_URL: postgres://root:root@db:5432/myappdb
+      KEYCLOAK_URL: http://keycloak:8080
+    networks:
+      - appnetwork
+    profiles:
+      - dev
+
+volumes:
+  db-data:
+  pgadmin-data:
+
+networks:
+  appnetwork:
+    driver: bridge
