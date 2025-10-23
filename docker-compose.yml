@@ -48,7 +48,7 @@ services:
       - appnetwork
 
   app:
-    build: ./backend/Dockerfile
+    build: ./backend
     container_name: python_app
     ports:
       - "8000:8000"
