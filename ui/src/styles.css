@@ -1,0 +1,639 @@
+/* ============================= */
+/* Global Reset & Base Styles (scoped) */
+/* ============================= */
+.app-container * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.app-container {
+  font-family: 'Inter', 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #defafb; 
+  color: #104b6b;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  flex-direction: column;
+  text-align: center; 
+}
+
+/* Headings & Text */
+.app-container h1,
+.app-container h2,
+.app-container h3,
+.app-container h4,
+.app-container h5,
+.app-container h6 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.app-container p {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.app-container a {
+  color: #1fa6d7;
+  text-decoration: none;
+}
+
+.app-container a:hover {
+  text-decoration: underline;
+}
+
+/* ============================= */
+/* Button Styles */
+.app-container button {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+}
+
+.app-container .button-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.app-container button:focus {
+  outline: 2px solid #1fa6d7;
+  outline-offset: 2px;
+}
+
+.app-container .btn-primary,
+.app-container button[type="submit"] {
+  background-color: #24ae9f;
+  color: #ffffff;
+}
+
+.app-container .btn-primary:hover,
+.app-container button[type="submit"]:hover {
+  background-color: #1fa6d7;
+}
+
+.app-container .btn-cancel {
+  background-color: #104b6b;
+  color: #ffffff;
+}
+
+.app-container .btn-cancel:hover {
+  background-color: #0d3550;
+}
+
+.app-container .btn-secondary {
+  background-color: #defafb;
+  color: #104b6b;
+}
+
+.app-container .btn-secondary:hover {
+  background-color: #b3f0f3;
+}
+
+.app-container .form-buttons {
+  display: flex;
+  justify-content: center; /* center form buttons */
+  gap: 0.5rem;
+}
+
+.app-container .btn-small {
+  font-size: 0.875rem;
+  padding: 0.4rem 0.8rem;
+}
+
+/* ============================= */
+/* Form Inputs */
+.app-container input,
+.app-container select,
+.app-container textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #1fa6d7;
+  border-radius: 0.5rem;
+  width: 100%;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.app-container input:focus,
+.app-container select:focus,
+.app-container textarea:focus {
+  border-color: #24ae9f;
+  box-shadow: 0 0 0 3px rgba(36, 174, 159, 0.3);
+  outline: none;
+}
+
+/* ============================= */
+/* Card Styles */
+.app-container .card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto; /* center cards */
+}
+
+/* ============================= */
+/* Toggle Switch */
+.app-container .toggle-switch {
+  position: relative;
+  width: 100%;
+  max-width: 300px; /* center and constrain width */
+  margin-left: auto;
+  margin-right: auto;
+  height: 48px;
+  background-color: #defafb;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.app-container .toggle-switch .switch-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 50%;
+  height: 44px;
+  background-color: #24ae9f;
+  border-radius: 9999px;
+  transition: all 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.app-container .toggle-switch .switch-option {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  z-index: 2;
+  color: #104b6b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.app-container .toggle-switch .switch-option.active {
+  color: #ffffff;
+}
+
+.app-container .toggle-switch.group-active .switch-slider {
+  transform: translateX(100%);
+}
+
+/* ============================= */
+/* Kanban Board */
+.app-container .kanban-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(280px, 1fr)); /* 4 equal columns */
+  gap: 1rem;
+  width: 100%;
+  max-width: 1600px; /* wider to fit all columns */
+  margin: 0 auto;
+  height: 70vh; /* slightly taller for consistency */
+  overflow-x: auto; /* allow horizontal scroll if needed */
+  padding-bottom: 1rem;
+}
+
+.app-container .kanban-column {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  height: 100%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  min-width: 280px; /* ensure consistent column width */
+}
+
+.app-container .kanban-column-header {
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #104b6b;
+}
+
+.app-container .kanban-column-tasks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 60px;
+  overflow-y: auto;
+}
+
+.app-container .kanban-column-tasks .card {
+  padding: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .app-container .kanban-board {
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container .kanban-board {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+/* ============================= */
+/* Modal Styles */
+.app-container .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.app-container .modal-content {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  position: relative;
+  margin-left: auto;
+  margin-right: auto; /* center modal */
+}
+
+.app-container .modal-content button.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #104b6b;
+}
+
+/* ============================= */
+/* Join Group Table */
+.app-container .join-group-table {
+  width: 100%;
+  max-width: 800px;
+  border-collapse: collapse;
+  margin: 1rem auto 0 auto; /* center table */
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.app-container .join-group-table th,
+.app-container .join-group-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #defafb;
+  font-size: 0.95rem;
+  color: #104b6b;
+}
+
+.app-container .join-group-table th {
+  background-color: #24ae9f;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.app-container .join-group-table tr:last-child td {
+  border-bottom: none;
+}
+
+.app-container .join-group-table button {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 0.4rem;
+}
+
+.app-container .join-group-table .btn-join {
+  background-color: #24ae9f;
+  color: #ffffff;
+}
+
+.app-container .join-group-table .btn-join:hover {
+  background-color: #1fa6d7;
+}
+
+.app-container .group-search {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.app-container .group-search input {
+  padding: 0.5rem;
+  border: 1px solid #1fa6d7;
+  border-radius: 0.5rem;
+}
+
+.app-container .group-search input:focus {
+  border-color: #24ae9f;
+  box-shadow: 0 0 0 3px rgba(36, 174, 159, 0.2);
+  outline: none;
+}
+
+/* ============================= */
+/* Miscellaneous Styles */
+/* ============================= */
+.app-container .top-right-buttons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.app-container .task-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  border: 2px solid #24ae9f;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.app-container .task-card.dragging {
+  background-color: #b3f0f3;
+  border-color: #1fa6d7;
+}
+
+.app-container .task-title {
+  display: flex;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.app-container .task-labels {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.app-container .label {
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.app-container .label.kind {
+  background-color: #b3f0f3;
+  color: #104b6b;
+}
+
+.app-container .label.priority.high {
+  background-color: #f87171;
+  color: white;
+}
+
+.app-container .label.priority.medium {
+  background-color: #facc15;
+  color: #104b6b;
+}
+
+.app-container .label.priority.low {
+  background-color: #60a5fa;
+  color: white;
+}
+
+
+.app-container .profile-groups {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.app-container .profile-groups li {
+  list-style-position: inside;
+}
+
+
+.app-container .profile-close-button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.app-container .title-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center; 
+  width: 100%; 
+}
+
+.app-container .title-with-icon .title-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+} 
+
+/* ============================= */
+/* Login Page */
+.login-container {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem 2rem;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  margin: 2rem auto;
+}
+
+.login-container h2 {
+  font-size: 1.75rem;
+  color: #104b6b;
+  margin-bottom: 1.5rem;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.login-container label {
+  font-weight: 600;
+  text-align: left;
+  color: #104b6b;
+}
+
+.login-container input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #1fa6d7;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.login-container input:focus {
+  border-color: #24ae9f;
+  box-shadow: 0 0 0 3px rgba(36, 174, 159, 0.3);
+  outline: none;
+}
+
+.login-container button[type="submit"] {
+  background-color: #24ae9f;
+  color: #ffffff;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-container button[type="submit"]:hover {
+  background-color: #1fa6d7;
+}
+
+.login-container button[type="submit"]:disabled {
+  background-color: #b3f0f3;
+  cursor: not-allowed;
+}
+
+.login-container .error {
+  color: #f87171;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.login-container .link-button {
+  background: none;
+  border: none;
+  color: #1fa6d7;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 0.25rem;
+  transition: color 0.2s;
+}
+
+.login-container .link-button:hover {
+  color: #24ae9f;
+}
+
+/* ============================= */
+/* Register Page */
+.register-container {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem 2rem;
+  max-width: 450px; /* slightly wider than login */
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  margin: 2rem auto;
+}
+
+.register-container h2 {
+  font-size: 1.75rem;
+  color: #104b6b;
+  margin-bottom: 1.5rem;
+}
+
+.register-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.register-container label {
+  font-weight: 600;
+  text-align: left;
+  color: #104b6b;
+}
+
+.register-container input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #1fa6d7;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.register-container input:focus {
+  border-color: #24ae9f;
+  box-shadow: 0 0 0 3px rgba(36, 174, 159, 0.3);
+  outline: none;
+}
+
+.register-container button[type="submit"] {
+  background-color: #24ae9f;
+  color: #ffffff;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.register-container button[type="submit"]:hover {
+  background-color: #1fa6d7;
+}
+
+.register-container button[type="submit"]:disabled {
+  background-color: #b3f0f3;
+  cursor: not-allowed;
+}
+
+.register-container .error {
+  color: #f87171;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+.register-container .success {
+  color: #24ae9f;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
