@@ -1,13 +1,10 @@
 # Unit Testing the Domain Models
-  
 Validation of entity behavior _in isolation_ (no database, no HTTP), covering constructors/defaults, simple relationships, and business helpers.
 
 ---
 
 ## What’s covered
-
 Unit tests for the following entities:
-
 | Entity | Test file | Key assertions |
 |---|---|---|
 | **Task** | [`src/tasks/task.entity.spec.ts`](../../apps/api/src/tasks/task.entity.spec.ts) | Defaults (`status=OPEN`, `priority=MEDIUM`), valid/invalid status transitions, overdue calculation |
@@ -23,7 +20,6 @@ Unit tests for the following entities:
 ---
 
 ## Files added/edited (relative paths)
-
 ```
 apps/api/
 ├─ src/
@@ -51,18 +47,17 @@ apps/api/
 ---
 
 ## How to run
-
 From the backend directory:
 ```bash
 cd apps/api
 
 # Unit & service/controller tests (no server needed)
 npm test
+```
 
 ---
 
 ## 🧭 Domain Relationships (Mermaid)
-
 ```mermaid
 classDiagram
   class User {
@@ -131,4 +126,5 @@ classDiagram
   Group "1" <-- "many" Comment : comments
   User "1" <-- "many" Comment : comments
   User "1" <-- "many" UserAchievement : achievements
+
 ```
