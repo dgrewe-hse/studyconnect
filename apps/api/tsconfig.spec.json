@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": false,
+    "types": ["jest", "node"],
+    "outDir": "./dist-test",
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts"]
+}

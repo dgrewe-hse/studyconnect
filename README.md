@@ -22,7 +22,7 @@ For additional background and high-level expectations, see the detailed concept 
 ### Running the Project
 
 To set up and run both the frontend and backend locally, please follow the detailed instructions in  
-👉 [`doc/project-setup.md`](doc/project-setup.md)
+👉 [`doc/Lab1/project-setup.md`](doc/Lab1/project-setup.md)
 
 This file includes:
 - Environment and Docker setup  
