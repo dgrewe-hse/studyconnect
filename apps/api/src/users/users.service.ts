@@ -5,17 +5,9 @@ import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private readonly repo: Repository<User>) {}
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-
-  create(userData: Partial<User>): Promise<User> {
-    const newUser = this.userRepository.create(userData);
-    return this.userRepository.save(newUser);
-  }
+  create(data: Partial<User>) { return this.repo.save(this.repo.create(data)); }
+  findAll() { return this.repo.find(); }
+  findOne(id: string) { return this.repo.findOne({ where: { id } }); }
 }
