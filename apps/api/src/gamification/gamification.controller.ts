@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { GamificationService } from './gamification.service';
-import { Badge } from './user-achievement.entity';
+import { Badge } from '../common/enums/badge.enum';
 
 @Controller('gamification')
 export class GamificationController {

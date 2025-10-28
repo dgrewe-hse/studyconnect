@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAchievement, Badge } from './user-achievement.entity';
+import { UserAchievement } from './user-achievement.entity';
+import { Badge } from '../common/enums/badge.enum';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
