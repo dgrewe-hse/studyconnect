@@ -8,6 +8,20 @@ How to run and test the **StudyConnect API** backend located in `apps/api/`.
 - Docker & Docker Compose
 - Git
 
+> Additionally, you must have **NestJS CLI** installed globally and TypeScript/Jest dependencies configured.
+
+### Install NestJS and essential tooling
+> Linux, macOS, and Windows (with PowerShell).
+
+```bash
+# Install NestJS CLI globally
+npm i -g @nestjs/cli
+
+# If TypeScript or Jest dependencies are missing, install them
+npm i -D typescript ts-node @types/node
+npm i -D jest ts-jest @types/jest tsconfig-paths
+```
+
 ## Setup
 
 ```bash
@@ -37,6 +51,7 @@ DB_LOGGING=true
 
 ## ▶️ Run the API
 ```bash
+cd apps/api
 npm run start:dev
 ```
 App: [http://localhost:3001](http://localhost:3001)  
@@ -45,6 +60,7 @@ Health checks: `/health` and `/health/ready`
 ## 🧪 Testing
 ```bash
 # Unit tests
+cd apps/api
 npm test
 
 # End-to-end tests
