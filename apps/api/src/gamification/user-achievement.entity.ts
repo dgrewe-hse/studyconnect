@@ -1,13 +1,6 @@
-// src/gamification/user-achievement.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from '../users/user.entity';
-
-export enum Badge {
-  FIRST_TASK='FIRST_TASK',
-  STREAK_7='STREAK_7',
-  STREAK_30='STREAK_30',
-  GROUP_LEADER='GROUP_LEADER'
-}
+import { Badge } from '../common/enums/badge.enum';
 
 @Entity()
 export class UserAchievement {

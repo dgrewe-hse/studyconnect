@@ -15,10 +15,10 @@ export class Task {
   @Column({ type: 'text', nullable: true }) notes?: string;
 
   @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.OPEN })
-  status: TaskStatus;
+  status: TaskStatus = TaskStatus.OPEN;
 
   @Column({ type: 'enum', enum: TaskPriority, default: TaskPriority.MEDIUM })
-  priority: TaskPriority;
+  priority: TaskPriority = TaskPriority.MEDIUM;
 
   @Column({ type: 'timestamptz', nullable: true }) dueDate?: Date;
 
