@@ -1,4 +1,4 @@
-# Exercise 4.1 — StudyConnect API Setup & Testing
+# Project Setup and Environment Configuration
 
 How to run and test the **StudyConnect API** backend located in `apps/api/`.
 
