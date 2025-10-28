@@ -1,6 +1,14 @@
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy import and_
 from models import db, User, Group, Task
+
+VALID_PRIORITIES = ['low', 'medium', 'high']
+VALID_STATUSES = {
+    'todo': ['in_progress'],
+    'in_progress': ['done', 'blocked'],
+    'blocked': ['in_progress'],
+    'done': []
+}
 
 # -----------------------------
 # User Services
@@ -34,9 +42,13 @@ def get_user_service(user_id: str):
 # Task Services
 # -----------------------------
 def create_task_service(data):
+    # Validate deadline
+    deadline_date = datetime.strptime(data['deadline'], '%Y-%m-%d').date()
+    if deadline_date < date.today():
+        raise ValueError("Deadline cannot be in the past")
+
     user_id = data.get('user_id')  # string
     group_id = data.get('group_id')
-    deadline_date = datetime.strptime(data['deadline'], '%Y-%m-%d').date()
 
     # check for existing duplicate task
     existing_task = Task.query.filter(
@@ -72,12 +84,42 @@ def update_task_service(task_id, data):
     if not task:
         raise Exception(f"Task with id {task_id} does not exist")
 
+    # Validate status transition
+    if 'status' in data:
+        current_status = task.status
+        new_status = data['status']
+        if new_status not in VALID_STATUSES.get(current_status, []):
+            raise ValueError(f"Invalid status transition from {current_status} to {new_status}")
+
+    # Validate progress
+    if 'progress' in data:
+        progress = data['progress']
+        if not (0 <= progress <= 100):
+            raise ValueError("Progress must be between 0 and 100")
+
+    # Validate priority
+    if 'priority' in data:
+        if data['priority'] not in VALID_PRIORITIES:
+            raise ValueError(f"Invalid priority value. Must be one of: {VALID_PRIORITIES}")
+
+    # Validate assignee
+    if 'assignee' in data:
+        assignee = User.query.get(data['assignee'])
+        if not assignee:
+            raise ValueError("Assignee user not found")
+        if task.group_id and task.group_id not in [g.id for g in assignee.groups]:
+            raise ValueError("Assignee must be member of the group")
+
+    # Update fields
     for field in ['title', 'kind', 'priority', 'status', 'user_id', 'group_id', 'assignee', 'notes', 'progress']:
         if field in data:
             setattr(task, field, data[field])
 
     if 'deadline' in data:
-        task.deadline = datetime.strptime(data['deadline'], '%Y-%m-%d').date()
+        deadline_date = datetime.strptime(data['deadline'], '%Y-%m-%d').date()
+        if deadline_date < date.today():
+            raise ValueError("Deadline cannot be in the past")
+        task.deadline = deadline_date
 
     db.session.commit()
     return task

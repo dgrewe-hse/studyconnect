@@ -1,7 +1,8 @@
 from functools import wraps
 from flask import request, jsonify, g
-from keycloak import KeycloakOpenID, KeycloakAdmin
 import os
+from keycloak.keycloak_openid import KeycloakOpenID
+from keycloak.keycloak_admin import KeycloakAdmin
 from dotenv import load_dotenv
 
 load_dotenv()
