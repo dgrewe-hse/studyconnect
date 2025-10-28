@@ -5,6 +5,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { HealthModule } from './health/health.module';
+import { CommonModule } from './common/common.module';
+import { GroupsModule } from './groups/groups.module';
+import { TasksModule } from './tasks/tasks.module';
+import { CategoriesModule } from './categories/categories.module';
+import { CommentsModule } from './comments/comments.module';
+import { GamificationModule } from './gamification/gamification.module';
 
 @Module({
   imports: [
@@ -20,16 +26,22 @@ import { HealthModule } from './health/health.module';
         password: cs.get('DATABASE_PASSWORD', 'postgres'),
         database: cs.get('DATABASE_NAME', 'studyconnect'),
         autoLoadEntities: true,
-        // puedes sobreescribir via env: DB_SYNC=true / DB_LOGGING=true
         synchronize: cs.get('DB_SYNC', 'true') === 'true',
         logging: cs.get('DB_LOGGING', 'true') === 'true',
       }),
     }),
 
     UsersModule,
-
     HealthModule,
+    CommonModule,
+    GroupsModule,
+    TasksModule,
+    CategoriesModule,
+    CommentsModule,
+    GamificationModule,
+
   ],
+  
   controllers: [AppController],
   providers: [AppService],
 })
