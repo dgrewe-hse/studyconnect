@@ -49,7 +49,7 @@ DB_SYNC=true
 DB_LOGGING=true
 ```
 
-## ▶️ Run the API
+## Run the API
 ```bash
 cd apps/api
 npm start
@@ -57,7 +57,7 @@ npm start
 App: [http://localhost:3001](http://localhost:3001)  
 Health checks: `/health` and `/health/ready`
 
-## 🧪 Testing
+## Testing
 ```bash
 # Unit tests
 cd apps/api
@@ -67,7 +67,7 @@ npm test
 npm run test:e2e
 ```
 
-## 🧹 Stop services
+## Stop services
 ```bash
 docker compose down
 ```
