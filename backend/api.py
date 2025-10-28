@@ -3,7 +3,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
-from keycloak import KeycloakError, KeycloakOpenID
+from keycloak import KeycloakOpenID
+from keycloak.exceptions import KeycloakError
 from models import User
 from services import (
     db, create_task_service, create_group_service,
@@ -11,7 +12,7 @@ from services import (
     join_group_service, update_task_service,
     get_or_create_user_from_keycloak, get_all_groups
 )
-from auth import keycloak_protect, keycloak_admin
+from auth import create_user, get_user_by_id, keycloak_protect, keycloak_admin, set_user_password, update_user
 
 # -----------------------------
 # App Initialization
@@ -80,14 +81,15 @@ def group_to_dict(g):
 def populate_keycloak_users():
     with app.app_context():
         try:
-            keycloak_users = keycloak_openid.get_users()
+            keycloak_users = keycloak_admin.get_users()
             print(f"Found {len(keycloak_users)} Keycloak users.")
             created_count = 0
             for kc_user in keycloak_users:
                 user_id = kc_user.get("id") or kc_user.get("sub")
                 if not user_id:
                     continue
-                existing_user = User.query.get(user_id)
+                # Updated to SQLAlchemy 2.x style
+                existing_user = db.session.get(User, user_id)
                 if not existing_user:
                     username = kc_user.get("username") or kc_user.get("email")
                     email = kc_user.get("email") or ""
@@ -287,8 +289,8 @@ def update_task(task_id):
 @app.route("/api/users/register", methods=["POST"])
 def register_user():
     data = request.json
-    first_name = data.get("firstName")  # new
-    last_name = data.get("lastName")    # new
+    first_name = data.get("firstName")
+    last_name = data.get("lastName")
     username = data.get("username")
     email = data.get("email")
     password = data.get("password")
@@ -300,37 +302,29 @@ def register_user():
 
     try:
         # 1️⃣ Create Keycloak user
-        result = keycloak_admin.create_user({
+        payload = {
             "username": username,
             "email": email,
-            "firstName": first_name,   # added
-            "lastName": last_name,     # added
+            "firstName": first_name,
+            "lastName": last_name,
             "enabled": True,
             "emailVerified": True,
             "attributes": {
                 "faculty": faculty or "",
                 "birthday": birthday or ""
             }
-        })
+        }
+        result = create_user(payload)
         new_user_id = result if isinstance(result, str) else result.get("id")
-        kc_user = keycloak_admin.get_user(new_user_id)
+        kc_user = get_user_by_id(new_user_id)
 
-        # 2️⃣ Set password for the new user
-        keycloak_admin.set_user_password(
-            user_id=new_user_id,
-            password=password,
-            temporary=False
-        )
+        # 2️⃣ Set password
+        set_user_password(new_user_id, password, temporary=False)
 
-        # 3️⃣ Remove required actions to allow immediate login
-        keycloak_admin.update_user(
-            user_id=new_user_id,
-            payload={"requiredActions": []}
-        )
+        # 3️⃣ Remove required actions
+        update_user(new_user_id, {"requiredActions": []})
 
-        print("Required actions:", kc_user.get("requiredActions"))  # should be []
-
-        # 4️⃣ Optional: Create user in local DB
+        # 4️⃣ Optional: Add user to local DB
         birthday_date = (
             datetime.strptime(birthday, "%Y-%m-%d").date() if birthday else None
         )
@@ -355,18 +349,8 @@ def register_user():
             "faculty": user.faculty
         }), 201
 
-    except KeycloakError as ke:
-        return jsonify({
-            "error": "Keycloak error",
-            "status_code": ke.response_code,
-            "response_body": (
-                ke.response_body.decode() if isinstance(ke.response_body, bytes)
-                else ke.response_body
-            )
-        }), ke.response_code
-
     except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+        return jsonify({"error": "Keycloak or internal error", "details": str(e)}), 500
 
 
 # -----------------------------

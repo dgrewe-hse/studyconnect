@@ -1,16 +1,14 @@
 from functools import wraps
 from flask import request, jsonify, g
-from keycloak import KeycloakOpenID, KeycloakAdmin, KeycloakError
+from keycloak import KeycloakOpenID, KeycloakAdmin
 import os
-from datetime import datetime
-from models import User, db   # adjust imports if your models are elsewhere
+from dotenv import load_dotenv
 
+load_dotenv()
 
-# ==========================================================
-# Keycloak Clients
-# ==========================================================
-
-# 🔐 Public client (used by frontend for login, refresh, userinfo)
+# -----------------------------
+# OpenID Client (Frontend Login, Token Refresh, Userinfo)
+# -----------------------------
 keycloak_openid = KeycloakOpenID(
     server_url=os.getenv("KEYCLOAK_SERVER_URL"),
     client_id=os.getenv("KEYCLOAK_CLIENT_ID"),
@@ -18,21 +16,35 @@ keycloak_openid = KeycloakOpenID(
     client_secret_key=os.getenv("KEYCLOAK_CLIENT_SECRET"),
 )
 
-# 🧩 Admin service account (client credentials flow)
+# -----------------------------
+# Admin Client (Service Account / Client Credentials)
+# -----------------------------
+server_url = os.getenv("KEYCLOAK_SERVER_URL")
+realm_name = os.getenv("KEYCLOAK_REALM")
+admin_client_id = os.getenv("KEYCLOAK_ADMIN_CLIENT_ID")
+admin_client_secret = os.getenv("KEYCLOAK_ADMIN_CLIENT_SECRET")
+
+# Step 1: Get full token dict from Keycloak
+keycloak_openid_admin = KeycloakOpenID(
+    server_url=server_url,
+    client_id=admin_client_id,
+    realm_name=realm_name,
+    client_secret_key=admin_client_secret,
+)
+admin_token_dict = keycloak_openid_admin.token(grant_type="client_credentials")
+
+# Step 2: Initialize KeycloakAdmin with the full token
 keycloak_admin = KeycloakAdmin(
-    server_url=os.getenv("KEYCLOAK_SERVER_URL"),
-    realm_name=os.getenv("KEYCLOAK_REALM"),
-    client_id=os.getenv("KEYCLOAK_ADMIN_CLIENT_ID"),
-    client_secret_key=os.getenv("KEYCLOAK_ADMIN_CLIENT_SECRET"),
-    verify=True,
+    server_url=server_url,
+    realm_name=realm_name,
+    token=admin_token_dict,  # Pass the full token dict!
+    verify=True
 )
 
-
-# ==========================================================
-# Decorator to Protect Routes
-# ==========================================================
+# -----------------------------
+# Decorator for protected routes
+# -----------------------------
 def keycloak_protect(f):
-    """Decorator to protect endpoints with Keycloak token"""
     @wraps(f)
     def decorated(*args, **kwargs):
         auth_header = request.headers.get("Authorization", None)
@@ -45,8 +57,7 @@ def keycloak_protect(f):
         g.access_token = access_token
 
         try:
-            userinfo = keycloak_openid.userinfo(access_token)
-            g.user = userinfo
+            g.user = keycloak_openid.userinfo(access_token)
         except Exception as e:
             if refresh_header:
                 try:
@@ -61,3 +72,30 @@ def keycloak_protect(f):
         request.user = g.user
         return f(*args, **kwargs)
     return decorated
+
+# -----------------------------
+# Admin helper functions
+# -----------------------------
+def get_all_users():
+    return keycloak_admin.get_users({})
+
+def get_user_by_id(user_id):
+    return keycloak_admin.get_user(user_id)
+
+def get_user_by_username(username):
+    user_id = keycloak_admin.get_user_id(username)
+    if user_id:
+        return keycloak_admin.get_user(user_id)
+    return None
+
+def create_user(payload, exist_ok=True):
+    return keycloak_admin.create_user(payload, exist_ok=exist_ok)
+
+def update_user(user_id, payload):
+    return keycloak_admin.update_user(user_id, payload)
+
+def delete_user(user_id):
+    return keycloak_admin.delete_user(user_id)
+
+def set_user_password(user_id, password, temporary=False):
+    return keycloak_admin.set_user_password(user_id, password, temporary)
