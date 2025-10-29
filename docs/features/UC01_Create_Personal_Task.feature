@@ -26,11 +26,11 @@ Feature: UC01 Create Personal Task
     Then the form shows validation <validation>
 
     Examples:
-      | title       | notes    | validation                    |
-      | ""          | "ok"     | "Title is required"          |
-      | "A...201"   | "ok"     | "Title must be <= 200 chars" |
+      | title       | notes      | validation                   |
+      | ""          | "ok"       | "Title is required"          |
+      | "A...201"   | "ok"       | "Title must be <= 200 chars" |
       | "Valid"     | "N...1001" | "Notes must be <= 1000 chars"|
-      | "Valid"     | "Short"  | "Success"                    |
+      | "Valid"     | "Short"    | "Success"                    |
 
   Scenario: Cancel task creation
     When the Student opens the Add Task form

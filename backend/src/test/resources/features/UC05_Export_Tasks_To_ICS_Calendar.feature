@@ -1,4 +1,3 @@
-@focus
 Feature: UC05 Export Tasks to ICS Calendar
   Student is exporting tasks to an ICS file to view deadlines in an external calendar.
 
