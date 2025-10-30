@@ -42,8 +42,8 @@ Create a `.env` file in `apps/api/`:
 PORT=3001
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASSWORD=postgres
+DATABASE_USER=studyconnect_app_db
+DATABASE_PASSWORD=super_secure_password_123
 DATABASE_NAME=studyconnect
 DB_SYNC=true
 DB_LOGGING=true
