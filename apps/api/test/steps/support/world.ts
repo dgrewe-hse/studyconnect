@@ -35,7 +35,9 @@ export class StudyWorld extends World {
   // Overdue Clock
   testClock?: string;
 
-  constructor(opts: IWorldOptions) { super(opts); }
+  constructor(opts: IWorldOptions) { 
+    super(opts); 
+  }
 
   async initApp() {
     const builder = NestTest.createTestingModule({ imports: [AppModule] })
@@ -53,9 +55,7 @@ export class StudyWorld extends World {
     }));
 
     this.app.use((req, _res, next) => {
-      if (!req.user) {
-        req.user = this.currentUser ?? { id: '11111111-1111-1111-1111-111111111111', email: 'alice@uni.de' };
-      }
+      req.user = this.currentUser ?? { id: '11111111-1111-1111-1111-111111111111', email: 'alice@uni.de' };
       next();
     });
 

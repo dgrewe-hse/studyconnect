@@ -13,9 +13,16 @@ cd apps/api
 npm install
 ```
 
+Run docker container in the repository root:
+
+```bash
+docker compose up -d
+```
+
 Run all BDD scenarios:
 
 ```bash
+cd apps/api
 npm run test:bdd
 ```
 

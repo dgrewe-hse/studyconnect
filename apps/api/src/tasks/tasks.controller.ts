@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, HttpCode, HttpStatus, Req,} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, HttpCode, HttpStatus, Req, NotFoundException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskStatusDto } from './dto/update-status.dto';
@@ -70,33 +70,26 @@ export class TasksController {
   }
 
   @Post(':id/assign/:userId')
-  async assign(@Param('id') id: string, @Param('userId') userId: string) {
-    console.log('controller.assign: START', {
-      route: `POST /tasks/${id}/assign/${userId}`,
-      taskId: id,
-      userId
-    });
+  async assign(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Req() req: any
+  ) {
+    const currentUserEmail = req?.user?.email ?? req?.user?.username ?? '';
+    const currentUserId = req?.user?.id ?? undefined;
 
-    try {
-      const result = await this.tasks.assign(id, userId);
-      
-      console.log('controller.assign: SUCCESS', {
-        taskId: result?.id,
-        assignees: result?.assignees?.map((a: any) => ({
-          id: a.id,
-          userId: a.userId,
-          email: a.user?.email
-        }))
-      });
+    const task = await this.tasks.findOne(id);
+    if (!task?.group?.id) throw new NotFoundException('Task not found');
 
-      return result;
-    } catch (error) {
-      console.error('controller.assign: ERROR', {
-        error: error.message,
-        stack: error.stack
-      });
-      throw error;
-    }
+    const assigneeEmail = await this.tasks.resolveUserEmailById(userId);
+
+    return this.tasks.assignTask(
+      task.group.id,
+      id,
+      assigneeEmail,
+      currentUserEmail,
+      currentUserId,
+    );
   }
 
   @Post(':id/unassign/:userId')
@@ -178,4 +171,5 @@ function pickAssigneeEmail(t: any): string | null {
   }
   return null;
 }
+
 

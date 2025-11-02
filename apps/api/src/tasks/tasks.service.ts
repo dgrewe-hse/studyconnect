@@ -8,6 +8,8 @@ import { GroupsService } from '../groups/groups.service';
 import { CategoriesService } from '../categories/categories.service';
 import { TaskStatus } from '../common/enums/task-status.enum';
 import { TaskPriority } from '../common/enums/task-priority.enum';
+import { DataSource } from 'typeorm';
+import { User } from '../users/user.entity';
 
 const ALLOWED: Record<TaskStatus, TaskStatus[]> = {
   [TaskStatus.OPEN]: [TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED],
@@ -22,9 +24,11 @@ export class TasksService {
   constructor(
     @InjectRepository(Task) private readonly tasks: Repository<Task>,
     @InjectRepository(TaskAssignment) private readonly assignments: Repository<TaskAssignment>,
+    @InjectRepository(User) private readonly usersRepo: Repository<User>,
     private readonly users: UsersService,
     private readonly groups: GroupsService,
     private readonly categories: CategoriesService,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(dto: {
@@ -79,23 +83,18 @@ export class TasksService {
   async findOne(id: string) {
     const t = await this.tasks.findOne({
       where: { id },
-      relations: ['assignees','assignees.user','group','creator','category','group.owner','group.members']
-
+      relations: ['assignees', 'assignees.user', 'group', 'creator', 'category', 'group.owner', 'group.members']
     });
 
     if (!t) return null;
 
-    const needsReload =
-      !Array.isArray(t.assignees) ||
-      t.assignees.length === 0 ||
-      t.assignees.some(a => !a?.user?.id);
-
-    if (needsReload) {
-      t.assignees = await this.assignments.find({
-        where: { task: { id } },
-        relations: ['user'],
-      });
-    }
+    const assignments = await this.assignments.find({
+      where: { task: { id } },
+      relations: ['user'],
+      order: { assignedAt: 'DESC' },
+    });
+    
+    t.assignees = assignments;
 
     return t;
   }
@@ -125,84 +124,54 @@ export class TasksService {
     currentUserEmail: string,
     currentUserId?: string,
   ) {
-    return (this as any).assignTaskExtension(groupId, taskId, assigneeEmail, currentUserEmail, currentUserId);
+    return this.assignTaskCore(groupId, taskId, assigneeEmail, currentUserEmail, currentUserId);
   }
 
-  async assignTaskExtension(
+  private async assignTaskCore(
     groupId: string,
     taskId: string,
     assigneeEmail: string,
     currentUserEmail: string,
     currentUserId?: string,
   ) {
-    console.log('assignTask: called', { groupId, taskId, assigneeEmail, currentUserEmail, currentUserId });
-
-    const group: any = await this.groups.findOne(groupId);
+    const group = await this.groups.findOne(groupId);
     if (!group) throw new NotFoundException('Group not found');
 
-    const rawMembers: any[] = Array.isArray(group.members) ? group.members : [];
-    const members: Array<{ user: any; role?: string }> = rawMembers.map(m => (m?.user ? { user: m.user, role: m.role } : { user: m, role: undefined }));
+    const membersRaw = Array.isArray(group.members) ? group.members : [];
+    const members = membersRaw.map(m => ({ user: (m as any).user ?? m, role: (m as any).role ?? (m as any).user?.role }));
 
-    const me = members.find(m => m?.user?.email === currentUserEmail) ||
-              (currentUserId ? members.find(m => m?.user?.id === currentUserId) : undefined);
-    const meRole = (me?.role ?? me?.user?.role ?? '') as string;
-    const isAdmin = meRole.toUpperCase() === 'ADMIN' ||
-      (group.owner && (group.owner.email === currentUserEmail || group.owner.id === currentUserId));
-    if (!isAdmin) throw new ForbiddenException('Forbidden');
+    const me = members.find(m => m?.user?.id === currentUserId) ??
+              members.find(m => m?.user?.email === currentUserEmail);
+    const meRole = (me?.role ?? me?.user?.role ?? '').toString().toUpperCase();
+    const isOwner = !!group.owner && (group.owner.id === currentUserId || group.owner.email === currentUserEmail);
+    const canAssign = isOwner || meRole === 'ADMIN';
+    if (!canAssign) throw new ForbiddenException('Forbidden');
 
     const assigneeMember = members.find(m => m?.user?.email === assigneeEmail);
     if (!assigneeMember) throw new ForbiddenException('User is not a member of this group');
 
-    const t = await this.findOne(taskId);
-    if (!t) throw new NotFoundException('Task not found');
-    if ((t as any).group?.id && (t as any).group.id !== groupId) {
-      throw new NotFoundException('Task not found');
-    }
+    const task = await this.tasks.findOne({
+      where: { id: taskId },
+      relations: ['assignees', 'assignees.user', 'group', 'creator', 'category'],
+    });
+    if (!task || task.group?.id !== groupId) throw new NotFoundException('Task not found');
 
-    const assigneeUserId = assigneeMember.user.id;
-    if ((t.assignees ?? []).some(a => a?.user?.id === assigneeUserId)) {
+    if ((task.assignees ?? []).some(a => a?.user?.id === assigneeMember.user.id && a.active !== false)) {
       return this.findOne(taskId);
     }
 
-    const u = await this.users.findOne(assigneeUserId);
-    if (!u) throw new NotFoundException('User not found');
-
-    const assignment = this.assignments.create({
-      user: { id: u.id } as any,
-      task: { id: taskId } as any,
-      active: true,
-      assignedAt: new Date(),
+    await this.dataSource.transaction(async manager => {
+      const repo = manager.getRepository(TaskAssignment);
+      const assignment = repo.create({
+        user: assigneeMember.user,
+        task,
+        active: true,
+        assignedAt: new Date(),
+      });
+      await repo.save(assignment);
     });
 
-    t.assignees = Array.isArray(t.assignees) ? [...t.assignees, assignment] : [assignment];
-    await this.tasks.save(t);
-
-    const afterRepoCheck = await this.assignments.find({
-      where: { task: { id: taskId } },
-      relations: ['user'],
-    });
-    console.log('assignments.table =', this.assignments.metadata.tableName);
-    console.log('assignments.afterRepoCheck =', afterRepoCheck.map(a => a.user?.email));
-
-    if (!afterRepoCheck.length) {
-      await this.assignments.manager.query(
-        'INSERT INTO task_assignment("userId","taskId","assignedAt","active") VALUES($1,$2,$3,$4) ON CONFLICT ("userId","taskId") DO NOTHING',
-        [u.id, taskId, new Date(), true],
-      );
-
-      const raw = await this.assignments.manager.query(
-        'SELECT id, "userId", "taskId" FROM task_assignment WHERE "taskId" = $1',
-        [taskId],
-      );
-      console.log('assignTask: RAW snapshot after fallback ->', raw);
-
-      if (!raw.length) {
-        throw new Error('Assignment not persisted: check table name/columns/migrations/TypeORM wiring');
-      }
-    }
-    const after = await this.findOne(taskId);
-    console.log('assignTask: task.assignees AFTER=', (after?.assignees || []).map((x: any) => x?.user?.email));
-    return after;
+    return this.findOne(taskId);
   }
 
 
@@ -249,5 +218,11 @@ export class TasksService {
       await this.tasks.save(t);
     }
     return { changed: toMark.length };
+  }
+
+  async resolveUserEmailById(userId: string): Promise<string> {
+    const user = await this.usersRepo.findOne({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+    return user.email;
   }
 }

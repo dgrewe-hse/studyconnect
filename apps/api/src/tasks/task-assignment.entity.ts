@@ -3,7 +3,6 @@ import { User } from '../users/user.entity';
 import { Task } from './task.entity';
 
 @Entity('task_assignment')
-@Unique(['user', 'task'])
 export class TaskAssignment {
   @PrimaryGeneratedColumn('uuid')
   id: string;

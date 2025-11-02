@@ -5,9 +5,9 @@ Feature: Assign Task to Group Member
 
   Background:
     Given a group "SE Project" with members:
-      | role  | user         |
-      | admin | alice@uni.de |
-      | member| bob@uni.de   |
+      | role    | user         |
+      | admin   | alice@uni.de |
+      | student | bob@uni.de   |
     And a task "Design schema" exists in group "SE Project"
 
   @happy
