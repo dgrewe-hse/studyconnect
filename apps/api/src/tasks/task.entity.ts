@@ -34,17 +34,28 @@ export class Task {
   @OneToMany(() => TaskAssignment, a => a.task, { cascade: true, eager: true })
   assignees: TaskAssignment[];
 
-  setStatus(next: TaskStatus) {
+  setStatus(next: TaskStatus): TaskStatus {
     const allowed = new Map<TaskStatus, TaskStatus[]>([
       [TaskStatus.OPEN, [TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED]],
       [TaskStatus.IN_PROGRESS, [TaskStatus.BLOCKED, TaskStatus.COMPLETED]],
       [TaskStatus.BLOCKED, [TaskStatus.IN_PROGRESS]],
       [TaskStatus.COMPLETED, []],
+      [TaskStatus.OVERDUE, [TaskStatus.IN_PROGRESS, TaskStatus.COMPLETED]],
     ]);
-    if (!allowed.get(this.status)?.includes(next)) {
-      throw new Error(`Invalid status transition: ${this.status} -> ${next}`);
+    
+    const allowedTransitions = allowed.get(this.status);
+    if (!allowedTransitions) {
+      throw new Error(`Unknown current status: ${this.status}`);
     }
-    this.status = next;
+    if (!allowedTransitions.includes(next)) {
+      throw new Error(`Invalid status transition: ${this.status} → ${next}`);
+    }
+
+    if (next === this.status) {
+      return this.status;
+    }
+
+    return next;
   }
 
   isOverdue(now = new Date()): boolean {

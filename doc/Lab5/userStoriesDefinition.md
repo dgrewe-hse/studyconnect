@@ -1,4 +1,4 @@
-# BDD – Gherkin Features (Exercise 5.1)
+# User Stories Definition
 
 ## Scope
 Three acceptance features for **StudyConnect**, aligned with existing **Use Cases (UC)** and **Functional Requirements (FR)**.
@@ -24,3 +24,4 @@ Install the required BDD packages:
 
 ```bash
 npm install -D @cucumber/cucumber cucumber-html-reporter ts-node typescript
+```
