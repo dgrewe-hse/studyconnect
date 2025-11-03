@@ -5,14 +5,14 @@ import os
 from dotenv import load_dotenv
 from keycloak import KeycloakOpenID
 from keycloak.exceptions import KeycloakError
-from models import User
-from services import (
+from .models import User
+from .services import (
     db, create_task_service, create_group_service,
     get_tasks_for_user, get_groups_for_user,
     join_group_service, update_task_service,
     get_or_create_user_from_keycloak, get_all_groups
 )
-from auth import create_user, get_user_by_id, keycloak_protect, keycloak_admin, set_user_password, update_user
+from .auth import create_user, get_user_by_id, keycloak_protect, keycloak_admin, set_user_password, update_user
 
 # -----------------------------
 # App Initialization
