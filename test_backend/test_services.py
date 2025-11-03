@@ -43,6 +43,7 @@ services_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "b
 spec = importlib.util.spec_from_file_location("backend_services", services_path)
 services = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(services)
+sys.modules["backend_services"] = services
 
 class FakeTask:
     query = None
@@ -128,7 +129,7 @@ def test_get_user_service_raises_when_not_exists():
 # -----------------------------
 # Tests for create_task_service (fixed: provide class-level attributes used in comparisons)
 # -----------------------------
-def test_create_task_service_returns_existing_task():
+def test_create_task_service_returns_existing_task(monkeypatch):
     data = {
         "title": "Homework",
         "deadline": "2025-10-30",
@@ -150,13 +151,19 @@ def test_create_task_service_returns_existing_task():
     services.Task = FakeTask
     services.db = make_fake_db()
 
+    class FakeDate(date):
+        @classmethod
+        def today(cls):
+            return date(2025, 1, 1)
+    monkeypatch.setattr(services, "date", FakeDate)
+
     result = services.create_task_service(data)
     assert result is existing_task
     assert services.db.session.add.call_count == 0
     assert services.db.session.commit.call_count == 0
 
 
-def test_create_task_service_creates_and_commits_new_task():
+def test_create_task_service_creates_and_commits_new_task(monkeypatch):
     data = {
         "title": "Project",
         "deadline": "2025-11-01",
@@ -173,6 +180,12 @@ def test_create_task_service_creates_and_commits_new_task():
     FakeTask.query = SimpleNamespace(filter=lambda *a, **k: SimpleNamespace(first=lambda: None))
     services.Task = FakeTask
     services.db = make_fake_db()
+
+    class FakeDate(date):
+        @classmethod
+        def today(cls):
+            return date(2025, 1, 1)
+    monkeypatch.setattr(services, "date", FakeDate)
 
     result = services.create_task_service(data)
 
@@ -194,7 +207,7 @@ def test_create_task_service_creates_and_commits_new_task():
 # -----------------------------
 # Tests for update_task_service
 # -----------------------------
-def test_update_task_service_updates_fields_and_deadline():
+def test_update_task_service_updates_fields_and_deadline(monkeypatch):
     # prepare fake task class and existing instance
     class FakeTask:
         query = None
@@ -219,6 +232,12 @@ def test_update_task_service_updates_fields_and_deadline():
     FakeTask.query = SimpleNamespace(get=lambda tid: existing if tid == "t1" else None)
     services.Task = FakeTask
     services.db = make_fake_db()
+
+    class FakeDate(date):
+        @classmethod
+        def today(cls):
+            return date(2025, 1, 1)
+    monkeypatch.setattr(services, "date", FakeDate)
 
     update_data = {
         "title": "New Title",
@@ -598,7 +617,7 @@ def test_update_task_service_validates_status_transition():
         services.update_task_service("t3", {"status": "cancelled"})
     assert "Invalid status transition" in str(excinfo.value)
 
-def test_create_task_service_validates_due_date():
+def test_create_task_service_validates_due_date(monkeypatch):
     data = {
         "title": "Past Task",
         "deadline": "2020-01-01",  # Past date
@@ -609,6 +628,12 @@ def test_create_task_service_validates_due_date():
     FakeTask.query = MockQuery()
     services.Task = FakeTask
     services.db = make_fake_db()
+
+    class FakeDate(date):
+        @classmethod
+        def today(cls):
+            return date(2024, 1, 1)
+    monkeypatch.setattr(services, "date", FakeDate)
     
     with pytest.raises(ValueError) as excinfo:
         services.create_task_service(data)
