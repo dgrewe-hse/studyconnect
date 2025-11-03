@@ -1,10 +1,10 @@
 import os
 import sys
-import importlib.util
 from types import SimpleNamespace, ModuleType
 from unittest.mock import Mock
 from datetime import date, datetime
 import pytest
+from backend import services
 
 # Mock classes for testing
 class MockQuery:
@@ -37,13 +37,6 @@ fake_models.User = FakeUser
 fake_models.Group = SimpleNamespace()
 fake_models.Task = SimpleNamespace()
 sys.modules["models"] = fake_models
-
-# load the services module from backend/services.py reliably
-services_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend", "services.py"))
-spec = importlib.util.spec_from_file_location("backend_services", services_path)
-services = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(services)
-sys.modules["backend_services"] = services
 
 class FakeTask:
     query = None
@@ -155,7 +148,7 @@ def test_create_task_service_returns_existing_task(monkeypatch):
         @classmethod
         def today(cls):
             return date(2025, 1, 1)
-    monkeypatch.setattr(services, "date", FakeDate)
+    monkeypatch.setattr(services, "date", FakeDate, raising=False)
 
     result = services.create_task_service(data)
     assert result is existing_task
@@ -185,7 +178,7 @@ def test_create_task_service_creates_and_commits_new_task(monkeypatch):
         @classmethod
         def today(cls):
             return date(2025, 1, 1)
-    monkeypatch.setattr(services, "date", FakeDate)
+    monkeypatch.setattr(services, "date", FakeDate, raising=False)
 
     result = services.create_task_service(data)
 
@@ -237,7 +230,7 @@ def test_update_task_service_updates_fields_and_deadline(monkeypatch):
         @classmethod
         def today(cls):
             return date(2025, 1, 1)
-    monkeypatch.setattr(services, "date", FakeDate)
+    monkeypatch.setattr(services, "date", FakeDate, raising=False)
 
     update_data = {
         "title": "New Title",
@@ -633,7 +626,7 @@ def test_create_task_service_validates_due_date(monkeypatch):
         @classmethod
         def today(cls):
             return date(2024, 1, 1)
-    monkeypatch.setattr(services, "date", FakeDate)
+    monkeypatch.setattr(services, "date", FakeDate, raising=False)
     
     with pytest.raises(ValueError) as excinfo:
         services.create_task_service(data)
