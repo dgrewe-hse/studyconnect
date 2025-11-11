@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "bdd": "cucumber-js test/features --require test/steps/**/*.ts --require-module ts-node/register --format progress --format html:test/report/cucumber.html",
+    "test:bdd": "npm run bdd"
+
   },
   "dependencies": {
     "@nestjs/common": "^11.1.8",
@@ -33,6 +36,7 @@
     "typeorm": "^0.3.27"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^12.2.0",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
     "@nestjs/cli": "^11.0.0",
@@ -42,6 +46,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^22.18.12",
     "@types/supertest": "^6.0.3",
+    "cucumber-html-reporter": "^7.2.0",
     "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",
