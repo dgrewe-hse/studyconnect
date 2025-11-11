@@ -69,12 +69,14 @@ Backend runs at **http://localhost:3001**
 ## Environment Variables
 Backend `.env` file (`apps/api/.env`):
 ```
+PORT=3001
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
-DATABASE_USER=postgres
-DATABASE_PASSWORD=postgres
+DATABASE_USER=studyconnect_app_db
+DATABASE_PASSWORD=super_secure_password_123
 DATABASE_NAME=studyconnect
-PORT=3001
+DB_SYNC=true
+DB_LOGGING=true
 ```
 
 ---
