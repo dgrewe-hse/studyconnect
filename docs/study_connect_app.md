@@ -52,3 +52,54 @@ StudyConnect is not intended to be a full project management suite. The focus is
    - Include positive reinforcement without distracting from learning objectives.
 6. Accessibility and Integration
    - Ensure cross-device accessibility and support exports (PDF, ICS) for workflow integration.
+
+### Prerequisites
+Before you begin, ensure you have the following installed:
+- **Docker Desktop**: For running containerized services.
+- **Python 3.12**: For the backend application.
+- **Node.js & npm**: For the frontend React application.
+- **Git**: For version control.
+
+### Installation
+1.  **Clone the repository and create virtual environment:**
+    ```sh
+    git clone https://github.com/Luka0103/studyconnect.git
+    cd studyconnect
+    python -m venv .venv && source .venv/bin/activate`
+    ```
+
+2.  **Backend Setup:**
+    - Navigate to the backend directory: `cd backend`
+    - Install dependencies: `pip install -r requirements.txt`
+
+3.  **Frontend Setup:**
+    - Navigate to the UI directory: `cd ../ui`
+    - Install dependencies: `npm install`
+
+### Environment Configuration
+The project requires a `.env` file in the root directory for local environment variables. An example is provided in `.env.example`.
+
+1.  Create your local configuration by copying the example file: `cp .env.example .env`
+2.  Open the new `.env` file and adjust the placeholder values. The Keycloak secrets must be obtained from the admin console of your running Keycloak instance.
+
+
+### App execution
+1.  **Start Infrastructure Services**: From the root directory, start Postgres, pgAdmin, and Keycloak using Docker Compose:
+    ```sh
+    docker compose up -d
+    ```
+2.  **Run the Backend**: In the `backend` directory with your virtual environment activated, start the backend with `python -m backend.api`
+3.  **Run the Frontend**: In the `ui` directory, start the Frontend with `npm run dev`
+
+### Test execution
+Both unit and BDD tests have a `.ini` file, so they can be executed from CLI without the need to pass respective filenames or directories.
+
+To run all unit tests, use the following command:
+```sh
+pytest
+```
+
+To run all BDD tests, use the following command:
+```sh
+behave
+```
