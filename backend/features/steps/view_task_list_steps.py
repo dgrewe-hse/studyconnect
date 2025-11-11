@@ -8,12 +8,7 @@ from backend.models import db, Task, User
 
 @step('the User "{username}" is logged in')
 def step_impl(context, username):
-    """
-    Simulates a user login.
-    In a real test setup, this would involve setting a session cookie
-    or mocking authentication.
-    For now, we store the logged-in user in the context.
-    """
+    """Simulates a user login."""
     with context.app.app_context():
         user = User.query.filter_by(username=username).first()
         assert user is not None, f'User "{username}" not found in the database.'
@@ -21,9 +16,7 @@ def step_impl(context, username):
 
 @step('the following tasks exist for user "{user_id}":')
 def step_impl(context, user_id):
-    """
-    Creates multiple tasks for a specific user based on a table.
-    """
+    """Creates multiple tasks for a specific user based on a table."""
     with context.app.app_context():
         for row in context.table:
             deadline_date = datetime.strptime(row['deadline'], '%Y-%m-%d').date() if row['deadline'] else None
@@ -43,9 +36,7 @@ def step_impl(context, user_id):
 
 @step('the database contains no tasks for user "{user_id}"')
 def step_impl(context, user_id):
-    """
-    Ensures that a user has no tasks.
-    """
+    """Ensures that a user has no tasks."""
     with context.app.app_context():
         Task.query.filter_by(user_id=user_id).delete()
         db.session.commit()
@@ -54,9 +45,7 @@ def step_impl(context, user_id):
 
 @step('the following tasks exist in the database:')
 def step_impl(context):
-    """
-    Creates various tasks for different users.
-    """
+    """Creates various tasks for different users."""
     with context.app.app_context():
         for row in context.table:
             user = db.session.get(User, row['user_id'])
@@ -87,10 +76,7 @@ def step_impl(context):
 
 @step('"{username}" visits the homepage')
 def step_impl(context, username):
-    """
-    Simulates a GET request to the homepage.
-    The response is stored in the context for the THEN steps.
-    """
+    """Simulates a GET request to the homepage."""
     from backend.services import get_tasks_for_user
     with context.app.app_context():
         user = context.logged_in_user
@@ -103,9 +89,7 @@ def step_impl(context, username):
 
 @step('the system should display a task list containing:')
 def step_impl(context):
-    """
-    Checks if the returned task list contains the expected tasks.
-    """
+    """Checks if the returned task list contains the expected tasks."""
     response_tasks = context.response_data
     expected_titles = {row['title'] for row in context.table}
     response_titles = {task.title for task in response_tasks}
@@ -127,26 +111,21 @@ def step_impl(context):
 
 @step('the system should display a message "{message}"')
 def step_impl(context, message):
-    """
-    Checks if the response indicates an empty state.
-    This is a conceptual step. In a real API, this might mean an empty list.
-    """
+    """Checks if the response indicates an empty state (an empty list)."""
     assert isinstance(context.response_data, list)
     assert len(context.response_data) == 0, "Expected an empty task list, but tasks were returned."
     context.empty_message_checked = True
 
 @step('no task list should be shown')
 def step_impl(context):
-    """
-    Confirms that the primary check for the empty state was performed.
-    """
+    """Confirms that the primary check for the empty state was performed."""
     assert hasattr(context, 'empty_message_checked') and context.empty_message_checked, \
         "The check for an empty message was not performed."
 
 @step('the displayed task list should contain only:')
 def step_impl(context):
     """
-    Verifies that the task list contains exactly the specified tasks and no more.
+    Verifies that the task list contains exactly the specified tasks.
     """
     response_tasks = context.response_data
     expected_titles = {row['title'] for row in context.table}
