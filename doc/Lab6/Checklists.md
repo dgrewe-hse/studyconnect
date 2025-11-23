@@ -22,7 +22,4 @@
 | B7 | Are requirements testable (measurable, verifiable)? | Partly | Terms like “securely” (User Management) and “non-intrusive reminders” (Deadline Awareness) are vague without clear criteria. |
 | B8 | Are responsibilities of “group member” vs. “admin” clearly expressed? | Yes | Section 1 & 3 explicitly distinguish roles and permissions. |
 
-## C. Domain Model
 
-
-## D. Entities
