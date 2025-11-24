@@ -1,5 +1,21 @@
 # 6 Reviews & Static Code Analysis Tools
 
+## 6.1 Conduct a Review
+
+### Introduction
+
+We conducted a peer review of Group 2's [repository](https://github.com/Ricardo0919/studyconnect-software-testing). We used the provided review template. The completed review table can be found [here](./files/review_english.xlsx).
+
+### Review Roles
+
+Due to the scope and formality of the review, we determined that a moderator was not required.
+
+Our team met on November 21, 2025, at approximately 10:30 to review Group 2's code.
+In the first phase, each team member reviewed a portion of the code in the role of an expert. We then presented our observations to one another and discussed whether to include them in our findings.
+
+Erik recorded our findings in the template file.
+
+
 ## 6.2 Retrospective – Reflection on the Review
 
 ### **What we noticed**
