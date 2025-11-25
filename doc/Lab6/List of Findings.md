@@ -6,3 +6,4 @@
 | Requiremnets | /docs/Assignment_2_Reqs_and_Quality_Goals.md  – Deadline and Progress Awareness, Req.3 | The description “non-intrusive reminders” is not verifyable. What counts as non-intrusive or intrusive?  | B7 | Annabel | Medium | | | |
 | Requirements | /docs/Assignment_2_Reqs_and_Quality_Goals.md - |  Export of data to PDF/ICS is mentioned under “Task and Goal Management” and again under “Accessibility and Integration”. This duplication may lead to inconsistencies later. | B6 | Annabel | Low | | | |
 | Initial Backend | backend/src/lib/dataStore.ts | Entities are not seperated into different files and rather placed in on huge file | C1.2 | Annabel | Low | | | |
+| Initial Backend / Code Quality | backend/src/lib/dataStore.ts | Files are too big and could be seperated into seperate files. E.g: dataStore.ts has approx. 1000 lines | C4.2 | Annabel | Low | | | |
