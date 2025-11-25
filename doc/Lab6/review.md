@@ -1,7 +1,7 @@
 # Review of group 3
 
 ## 1. Review Type: Technical Review conducted by peers
-Our team has chosen a Hybrid Approach that leverages the structure and objectives of a Technical Review while utilizing our team members as Peers. The review is conducted by our team members as equally competent "Peers", which is appropriate as we are all peers in the Software Testing lecture with similar expertise and knowledge.
+Our team has chosen a Hybrid Approach that leverages the structure and objectives of a Technical Review while utilizing our team members as Peers. The review is conducted by our team members as equally competent "Peers", which is appropriate as we are all peers in the Software Testing lecture with similar expertise and knowledge. We´ll send the list of findings to the team under review. 
 
 ## 2. Review Object
 **Repository under review:**  
@@ -19,7 +19,8 @@ https://github.com/To-Kar/studyconnect
 | Moderator | Annabel | Organizes review, Review Masterplan, Leads meeting, ensures structure, timeboxing, enforces review rules. |
 | Reviewer 1  | Artur | Both reviewers will check all Checklist points individually to get the best results. |
 | Reviewer 2  | Annabel | Both reviewers will check all Checklist points individually to get the best results. |
-| Notetaker | Richi |
+| Reviewer 3  | Ricardo | Both reviewers will check all Checklist points individually to get the best results. |
+| Notetaker | Artur |
 
 
 ## 4. Review Goals

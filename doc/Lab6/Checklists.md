@@ -31,6 +31,7 @@
 | C1.2 | Are entities separated into clear files/folders (e.g., /models)? | No | All interfaces and enums are placed in a single huge file (`dataStore.ts`). |
 | C1.3 | Is there a consistent naming convention for entities and attributes? | Yes | Naming is clean and consistent across interfaces. |
 | C1.4 | Are DTOs or request/response models used? | No | No DTO layer. Controllers directly accept raw data. |
+| C1.5 | Is the backend structured clearly? | No | See folders under source. |
 | **2. Attribute Completeness & Correctness** | ||||
 | C2.1 | Do entities include essential attributes? | Yes | All fields present |
 | C2.2 | Are optional attributes explicitly marked with “?”? | Yes | description, dueDate, assigneeId, etc. are correct. |
@@ -39,7 +40,7 @@
 | C3.2 | Is Group & Task relationship defined? | Yes | Tasks can reference groupId. |
 | C3.3 | Are relationships between Users and Tasks defined? (for example creator & assignee) | Yes | creatorId mandatory, assigneeId optional. |
 | **4. Code Quality** |
-| C4.1 | Is code free of duplication? | No | Massive duplication: two full systems (in-memory + DB)? |
+| C4.1 | Is code free of duplication? | No | Massive duplication: two full systems (in-memory + DB) |
 | C4.2 | Do the files have a reasonable length? | No | DataStore is extremely large (≈ 1000+ lines). |
 | C4.3 | Is documentation or commenting provided? | Partly | Kept to minimum, but good to understand code better. |
 | **5. Testing** |
