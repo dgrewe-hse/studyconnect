@@ -9,18 +9,17 @@ https://github.com/To-Kar/studyconnect
 
 **Artifacts in scope:**  
 1. Introductory text / problem description of StudyConnect  
-2. Functional Requirements & Non-functional Requirements  
-3. Domain Model (entities, relationships)  
-4. Initial backend entity implementations (User, Group, Task, …)
+2. Functional system requirements and specification  
+3. Initial backend entity implementations (User, Group, Task, …)
 
 ## 3. Reiew Roles and Responsibilities
 
 | Role | Team Member | Responsibilities |
 | :--- | :--- | :--- |
-| Moderator | - | Organizes review, Review Masterplan, Leads meeting, ensures structure, timeboxing, enforces review rules. |
-| Reviewer 1 (Requirements) | - | Checks Requirements, Domain Model, testability, consistency. |
-| Reviewer 2 (Code) |- | Checks Entities, relations, naming, annotations, implementation quality. |
-| Notetaker | Reviewer 1 and 2 | Documents defects, decisions, open questions, meeting minutes. |
+| Moderator | Annabel | Organizes review, Review Masterplan, Leads meeting, ensures structure, timeboxing, enforces review rules. |
+| Reviewer 1  | Artur | Both reviewers will check all Checklist points individually to get the best results. |
+| Reviewer 2  | Annabel | Both reviewers will check all Checklist points individually to get the best results. |
+| Notetaker | Richi |
 
 
 ## 4. Review Goals
@@ -39,7 +38,7 @@ The primary goal of this Technical Review is to confirm the technical correctnes
 ## 5. Review Process
 ### 5.1 Planning
 - Define scope, roles, and timeline (this document).
-- Confirm templates used: `Masterplan.md`,`CHECKLIST.md`, `List of Findings.md`, `Review Report.md`, `Retrospective.md`
+- Confirm templates used: `Masterplan.md`,`Checklist.md`, `List of Findings.md`, `Review Report.md`, `Retrospective.md`
 
 ### 5.2 Kick-off
 - Align understanding of the artifacts to be reviewed.
@@ -53,7 +52,7 @@ The primary goal of this Technical Review is to confirm the technical correctnes
 - *Preparation time:* approx. 60–90 minutes per reviewer.
 
 ### 5.4 Review Meeting
-- 30–45 minutes, led by the Moderator.
+- 60 minutes, led by the Moderator.
 - Agenda: Requirements findings, Domain Model findings, Entities / Implementation findings, and Cross-cutting concerns (consistency, naming).
 - The Notetaker documents all confirmed defects in `List of Findings.md`.
 
@@ -63,11 +62,12 @@ The primary goal of this Technical Review is to confirm the technical correctnes
 ### 5.6 Follow-up
 - Verify completeness of the defect log.
 - Ensure all findings are clearly documented.
-- Write the final retrospective (`Review Report.md`).
+- Document the follow up (`Report Review.md`).
 
 ### 5.7 Retrospective
 - Our team will reflect on the review
 - Are reviews a suitable method for our team?
 - If so for what area would we use them?
+- Document our tems conclusion about the review. (`Retrospective.md`)
 
 
