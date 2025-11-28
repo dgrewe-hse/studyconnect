@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export default function EditTaskModal({ task, onSave, onCancel, userId, fetchWithAuth }){
+export default function EditTaskModal({ task, onSave, onCancel, userId }) {
   const [title, setTitle] = useState("");
   const [deadline, setDeadline] = useState("");
   const [kind, setKind] = useState("");
@@ -11,63 +11,121 @@ export default function EditTaskModal({ task, onSave, onCancel, userId, fetchWit
   const [notes, setNotes] = useState("");
   const [progress, setProgress] = useState(0);
   const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Fetch groups from API
+  // =============================
+  // Authenticated fetch helper
+  // =============================
+  async function fetchWithToken(url, options = {}) {
+    const token = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+
+    if (res.status !== 401) return res;
+
+    if (!refreshToken) throw new Error("Session expired. Please log in again.");
+
+    const refreshRes = await fetch("http://localhost:5000/api/refresh", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    const data = await refreshRes.json();
+    if (!refreshRes.ok) throw new Error(data.error || "Failed to refresh token");
+
+    localStorage.setItem("access_token", data.access_token);
+    if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+
+    return await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.access_token}`,
+        ...(options.headers || {}),
+      },
+    });
+  }
+
+  // =============================
+  // Fetch user's groups
+  // =============================
   useEffect(() => {
-    const fetchGroups = async () => {
+    async function fetchGroups() {
       try {
-        const res = await fetch(`http://localhost:5000/api/groups/user/${userId}`);
+        const res = await fetchWithToken(`http://localhost:5000/api/groups/user/${userId}`);
         const data = await res.json();
-        setGroups(data);
+        if (res.ok) {
+          setGroups(data.filter(g => g.role)); // only include groups with a role
+        } else {
+          console.warn("Failed to load groups:", data.error);
+        }
       } catch (err) {
         console.error("Failed to fetch groups:", err);
       }
-    };
-
-    fetchGroups();
+    }
+    if (userId) fetchGroups();
   }, [userId]);
 
-  // Populate task fields
+  // =============================
+  // Populate fields when task loads
+  // =============================
   useEffect(() => {
     if (task) {
       setTitle(task.title || "");
       setDeadline(task.deadline || "");
       setKind(task.kind || "");
       setPriority(task.priority || "");
-      setTaskType(task.taskType || "my");
-      setSelectedGroup(task.group || "");
+      setTaskType(task.group ? "group" : "my");
+      setSelectedGroup(task.group ? task.group.id : "");
       setAssignee(task.assignee || "");
       setNotes(task.notes || "");
       setProgress(task.progress || 0);
     }
   }, [task]);
-const handleSave = async () => {
-  const updatedTask = {
-    title,
-    deadline,
-    kind,
-    priority,
-    status: task.status,
-    user_id: task.user_id,
-    group_id: taskType === "group" ? selectedGroup : null,
-    assignee,
-    notes,
-    progress,
+
+  // =============================
+  // Handle save
+  // =============================
+  const handleSave = async () => {
+    const updatedTask = {
+      title,
+      deadline,
+      kind,
+      priority,
+      status: task.status,
+      user_id: task.user_id,
+      group: taskType === "group" ? selectedGroup : null,
+      assignee: assignee || null,
+      notes: notes || null,
+      progress,
+    };
+
+    setLoading(true);
+    try {
+      const res = await fetchWithToken(`http://localhost:5000/api/tasks/${task.id}`, {
+        method: "PUT",
+        body: JSON.stringify(updatedTask),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to update task");
+
+      onSave(data.task);
+    } catch (err) {
+      alert("Error updating task: " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  try {
-    const res = await fetchWithAuth(`http://localhost:5000/api/tasks/${task.id}`, {
-      method: "PUT",
-      body: JSON.stringify(updatedTask),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Failed to update task");
-    onSave(data.task);
-  } catch (err) {
-    alert("Error updating task: " + err.message);
-  }
-};
-
 
   const isValid =
     title.trim() &&
@@ -78,6 +136,9 @@ const handleSave = async () => {
 
   if (!task) return null;
 
+  // =============================
+  // Render
+  // =============================
   return (
     <div className="modal-overlay">
       <div className="modal-content max-w-md w-full p-4">
@@ -178,20 +239,24 @@ const handleSave = async () => {
             </div>
           )}
 
-          {/* Optional */}
-          <input
-            type="text"
-            value={assignee}
-            onChange={(e) => setAssignee(e.target.value)}
-            placeholder="Assignee"
-            className="w-full p-2 border rounded-md"
-          />
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Notes"
-            className="w-full p-2 border rounded-md"
-          />
+          {/* Optional Fields */}
+          <div>
+            <input
+              type="text"
+              value={assignee}
+              onChange={(e) => setAssignee(e.target.value)}
+              placeholder="Assignee"
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
+          <div>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Notes"
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
 
           {/* Progress */}
           <div className="mt-2">
@@ -208,8 +273,8 @@ const handleSave = async () => {
 
           {/* Buttons */}
           <div className="flex gap-2 mt-4">
-            <button className="btn-primary flex-1" onClick={handleSave} disabled={!isValid}>
-              Save
+            <button className="btn-primary flex-1" onClick={handleSave} disabled={!isValid || loading}>
+              {loading ? "Saving..." : "Save"}
             </button>
             <button className="btn-cancel flex-1" onClick={onCancel}>
               Cancel

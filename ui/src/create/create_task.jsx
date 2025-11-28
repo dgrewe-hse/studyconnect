@@ -30,7 +30,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
 
     if (res.status !== 401) return res;
 
-    // Attempt to refresh token if expired
     if (!refreshToken) throw new Error("Session expired. Please log in again.");
 
     const refreshRes = await fetch("http://localhost:5000/api/refresh", {
@@ -42,11 +41,9 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
     const data = await refreshRes.json();
     if (!refreshRes.ok) throw new Error(data.error || "Failed to refresh token");
 
-    // Store new tokens (Keycloak rotates refresh tokens)
     localStorage.setItem("access_token", data.access_token);
     if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
 
-    // Retry request with new access token
     return await fetch(url, {
       ...options,
       headers: {
@@ -66,7 +63,8 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
         const res = await fetchWithToken(`http://localhost:5000/api/groups/user/${userId}`);
         const data = await res.json();
         if (res.ok) {
-          setGroups(data.map((g) => g.name));
+          // Only include groups where user has a role
+          setGroups(data.filter(g => g.role));
         } else {
           console.warn("Failed to load groups:", data.error);
         }
@@ -106,7 +104,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create task");
 
-      // Update Kanban board
       if (onAddTask) onAddTask({ ...task, id: data.task.id });
 
       // Reset form
@@ -119,7 +116,7 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
       setAssignee("");
       setNotes("");
 
-      onCancel(); // close modal
+      onCancel();
     } catch (err) {
       console.error("Error creating task:", err);
       alert("Error creating task: " + err.message);
@@ -127,6 +124,13 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
       setLoading(false);
     }
   };
+
+  const isValid =
+    title.trim() &&
+    deadline &&
+    kind &&
+    priority &&
+    (taskType === "my" || (taskType === "group" && selectedGroup));
 
   // =============================
   // Render
@@ -136,7 +140,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
       <h2 className="text-xl font-semibold mb-4 text-center">Create New Task</h2>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
-        {/* Title */}
         <div>
           <label className="block mb-1 font-medium">
             Title <span style={{ color: "red" }}>*</span>
@@ -150,7 +153,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
           />
         </div>
 
-        {/* Deadline */}
         <div>
           <label className="block mb-1 font-medium">
             Deadline <span style={{ color: "red" }}>*</span>
@@ -164,7 +166,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
           />
         </div>
 
-        {/* Kind */}
         <div>
           <label className="block mb-1 font-medium">
             Kind <span style={{ color: "red" }}>*</span>
@@ -182,7 +183,6 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
           </select>
         </div>
 
-        {/* Priority */}
         <div>
           <label className="block mb-1 font-medium">
             Priority <span style={{ color: "red" }}>*</span>
@@ -231,15 +231,15 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
             >
               <option value="">-- Choose a Group --</option>
               {groups.map((group) => (
-                <option key={group} value={group}>
-                  {group}
+                <option key={group.id} value={group.id}>
+                  {group.name}
                 </option>
               ))}
             </select>
           </div>
         )}
 
-        {/* Optional Fields */}
+        {/* Optional */}
         <div>
           <label className="block mb-1 font-medium">Assignee</label>
           <input
@@ -261,7 +261,7 @@ export default function CreateTask({ userId, onCancel, onAddTask }) {
 
         {/* Buttons */}
         <div className="form-buttons mt-4 flex gap-2">
-          <button type="submit" className="btn-primary flex-1" disabled={loading}>
+          <button type="submit" className="btn-primary flex-1" disabled={!isValid || loading}>
             {loading ? "Creating..." : "Create Task"}
           </button>
           <button type="button" onClick={onCancel} className="btn-cancel flex-1" disabled={loading}>
