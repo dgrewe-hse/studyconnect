@@ -1,0 +1,67 @@
+repos:
+  # --- Generic hygiene hooks (fast, run on every commit) ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-xml
+      - id: check-json
+      - id: check-merge-conflict
+
+  # --- Optional: formatting via prettier for non-Java files ---
+  # - repo: https://github.com/pre-commit/mirrors-prettier
+  #   rev: v4.0.0-alpha.8
+  #   hooks:
+  #     - id: prettier
+  #       files: "\\.(md|json|yml|yaml)$"
+
+  # --- Local hooks to run Maven for the backend module ---
+  - repo: local
+    hooks:
+      # Fast sanity check (compilation, basic checks) before every commit
+      - id: backend-maven-compile
+        name: Backend Maven compile (no tests)
+        entry: mvn -f backend/pom.xml -q -DskipTests compile
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+      # Run all tests (unit, integration, BDD) before each commit
+      - id: backend-maven-test
+        name: Backend Maven test (unit, integration, BDD)
+        entry: mvn -f backend/pom.xml -q test
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+      # Run static analysis / linter if you have Checkstyle/SpotBugs/etc. configured in the POM
+      # Example assumes you have a checkstyle plugin bound to the "check" phase or an explicit goal.
+      - id: backend-maven-verify-no-tests
+        name: Backend Maven verify (no tests, runs checkers)
+        entry: mvn -f backend/pom.xml -q -DskipTests verify
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+      # Run full test suite and verification before push
+      - id: backend-maven-test-verify
+        name: Backend Maven test (full test suite)
+        entry: mvn -f backend/pom.xml -q test verify
+        language: system
+        pass_filenames: false
+        stages: [push]
+      
+      # OWASP Dependency-Check for known vulnerable dependencies
+      # This will download the OWASP plugin and CVE database on first run (can take a bit).
+      - id: backend-owasp-dependency-check
+        name: Backend OWASP Dependency-Check (dependency vulnerability scan)
+        entry: >
+          mvn -f backend/pom.xml -q
+          org.owasp:dependency-check-maven:check
+          -Dformat=HTML
+          -DfailBuildOnCVSS=7
+        language: system
+        pass_filenames: false
+        stages: [push]
