@@ -12,7 +12,7 @@ jobs:
               uses: actions/checkout@v4
             # install java on container os
             - name: Install Java
-              uses: actions/setup-java@v2
+              uses: actions/setup-java@v4
               with:
                 distribution: 'temurin'
                 java-version: '17'
