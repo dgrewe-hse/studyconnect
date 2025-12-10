@@ -1,0 +1,25 @@
+name: Backend CI
+
+on: 
+    push:
+        branches: "**"
+    
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            # install java on container os
+            - name: Install Java
+              uses: actions/setup-java@v2
+              with:
+                distribution: 'temurin'
+                java-version: '17'
+                cache: 'maven'
+            # build the project
+            - name: Build with Maven
+              working-directory: backend
+              run: |
+                ./mvnw test
+
