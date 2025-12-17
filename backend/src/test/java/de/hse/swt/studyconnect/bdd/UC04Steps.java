@@ -72,8 +72,8 @@ public class UC04Steps {
             world.lastValidationMessage = "Select at least one assignee";
             return;
         }
-        // For simplicity, assign to first
-        draftTask.setAssignedTo(selectedAssignees.getFirst());
+        // For simplicity, assign to first assignee in list
+        draftTask.setAssignedTo(selectedAssignees.get(0));
         world.tasksByTitle.put(draftTask.getTitle(), draftTask);
         world.notifyAssignees(selectedAssignees, "Assigned: " + draftTask.getTitle());
         world.lastValidationMessage = "Success";
