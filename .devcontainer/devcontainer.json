@@ -27,7 +27,7 @@
     }
   },
 
-  "postCreateCommand": "npm install -g npm@latest && cd frontend && npm install",
+  "postCreateCommand": "npm install -g npm@latest && cd frontend && npm install && sudo apt-get update && sudo apt-get install -y xvfb libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xfonts-base xfonts-75dpi xfonts-100dpi firefox-esr libdbus-glib-1-2 libxt6",
   
   "remoteUser": "vscode",
   
