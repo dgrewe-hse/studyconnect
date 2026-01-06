@@ -62,11 +62,13 @@
             <scope>runtime</scope>
         </dependency> -->
         
-        <!-- H2 Database for Testing -->
+        <!-- H2 Database for Test Profile (used via application-test.properties).
+             Scope is runtime so the application can start with profile "test"
+             using the in-memory H2 database. -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         
         <!-- JWT -->
