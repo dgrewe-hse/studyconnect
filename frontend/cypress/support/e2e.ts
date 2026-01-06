@@ -43,9 +43,10 @@ declare global {
 }
 
 // For UI tests, mock API failures by default (backend may not be running)
-// This can be overridden in individual tests if needed
+// E2E tests (in e2e/ directory) will use the real backend
 beforeEach(() => {
   // Only apply to UI tests (tests in ui/ directory)
+  // E2E tests should NOT have API mocking
   if (Cypress.spec.relative.includes('/ui/')) {
     // Mock API failures to simulate backend being unavailable
     cy.intercept('GET', '**/api/**', { forceNetworkError: true }).as('apiCall')
@@ -54,6 +55,7 @@ beforeEach(() => {
     cy.intercept('PATCH', '**/api/**', { forceNetworkError: true }).as('apiCall')
     cy.intercept('DELETE', '**/api/**', { forceNetworkError: true }).as('apiCall')
   }
+  // E2E tests in e2e/ directory will use real API calls
 })
 
 export {}

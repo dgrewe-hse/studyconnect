@@ -5,10 +5,12 @@
   "type": "module",
   "scripts": {
     "test": "node run-tests.js",
-    "test:ui": "node run-tests.js --suite ui",
-    "test:login": "node run-tests.js --suite login",
-    "test:navigation": "node run-tests.js --suite navigation",
-    "test:dashboard": "node run-tests.js --suite dashboard"
+    "test:ui": "node run-tests.js --type=ui",
+    "test:e2e": "node run-tests.js --type=e2e",
+    "test:login": "node run-tests.js --type=ui --suite=login",
+    "test:navigation": "node run-tests.js --type=ui --suite=navigation",
+    "test:dashboard": "node run-tests.js --type=ui --suite=dashboard",
+    "test:uc01": "node run-tests.js --type=e2e --suite=uc01-create-task"
   },
   "dependencies": {
     "selenium-webdriver": "^4.15.2"

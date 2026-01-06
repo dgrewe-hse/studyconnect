@@ -11,6 +11,7 @@ export default defineConfig({
     }
   },
   server: {
+    host: '0.0.0.0', // Bind to all interfaces for containerized environments
     port: 3000,
     proxy: {
       '/api': {

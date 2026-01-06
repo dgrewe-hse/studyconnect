@@ -10,8 +10,10 @@
     "test:cypress": "cypress run",
     "test:cypress:open": "cypress open",
     "test:cypress:ui": "cypress run --spec 'cypress/e2e/ui/**/*.cy.ts'",
+    "test:cypress:e2e": "cypress run --spec 'cypress/e2e/e2e/**/*.cy.ts'",
     "test:cypress:headless": "xvfb-run -a cypress run",
     "test:cypress:ui:headless": "xvfb-run -a cypress run --spec 'cypress/e2e/ui/**/*.cy.ts'",
+    "test:cypress:e2e:headless": "xvfb-run -a cypress run --spec 'cypress/e2e/e2e/**/*.cy.ts'",
     "test:selenium": "node selenium/run-tests.js"
   },
   "dependencies": {

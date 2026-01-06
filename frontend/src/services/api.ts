@@ -5,6 +5,9 @@
 import axios, { AxiosInstance, AxiosError } from 'axios'
 import type { Task, TaskCreateRequest, TaskUpdateRequest, Page } from '@/types'
 
+// Backend has context-path=/api and controller @RequestMapping("/api/v1/tasks")
+// So full path is: /api (context-path) + /api/v1/tasks (controller) = /api/api/v1/tasks
+// Base URL should include the context-path
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
 
 /**
@@ -81,7 +84,10 @@ export const taskApi = {
    * Get paginated list of tasks
    */
   async getTasks(page = 0, size = 20): Promise<Page<Task>> {
-    const response = await apiClient.get('/v1/tasks', {
+    // Backend: context-path=/api, controller @RequestMapping("/api/v1/tasks")
+    // Full path: /api + /api/v1/tasks = /api/api/v1/tasks
+    // Base URL is /api, so endpoint is /api/v1/tasks
+    const response = await apiClient.get('/api/v1/tasks', {
       params: { page, size }
     })
     return response.data
@@ -91,7 +97,7 @@ export const taskApi = {
    * Get a single task by ID
    */
   async getTask(id: number): Promise<Task> {
-    const response = await apiClient.get(`/v1/tasks/${id}`)
+    const response = await apiClient.get(`/api/v1/tasks/${id}`)
     return response.data
   },
 
@@ -99,7 +105,7 @@ export const taskApi = {
    * Create a new task
    */
   async createTask(task: TaskCreateRequest): Promise<Task> {
-    const response = await apiClient.post('/v1/tasks', task)
+    const response = await apiClient.post('/api/v1/tasks', task)
     return response.data
   },
 
@@ -107,7 +113,7 @@ export const taskApi = {
    * Update an existing task
    */
   async updateTask(id: number, task: TaskUpdateRequest): Promise<Task> {
-    const response = await apiClient.put(`/v1/tasks/${id}`, task)
+    const response = await apiClient.put(`/api/v1/tasks/${id}`, task)
     return response.data
   },
 
@@ -115,7 +121,7 @@ export const taskApi = {
    * Update task status
    */
   async updateTaskStatus(id: number, status: Task['status']): Promise<Task> {
-    const response = await apiClient.patch(`/v1/tasks/${id}/status`, { status })
+    const response = await apiClient.patch(`/api/v1/tasks/${id}/status`, { status })
     return response.data
   },
 
@@ -123,7 +129,7 @@ export const taskApi = {
    * Delete a task
    */
   async deleteTask(id: number): Promise<void> {
-    await apiClient.delete(`/v1/tasks/${id}`)
+    await apiClient.delete(`/api/v1/tasks/${id}`)
   }
 }
 

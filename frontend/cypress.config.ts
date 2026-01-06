@@ -3,6 +3,9 @@ import { defineConfig } from 'cypress'
 export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:3000',
+    env: {
+      API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:8080/api',
+    },
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
