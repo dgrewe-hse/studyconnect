@@ -99,3 +99,15 @@ log/
 # Maven wrapper and local settings backups
 .mvn/wrapper/maven-wrapper.jar
 
+# ------------------------------
+# Node.js and npm related
+# ------------------------------
+
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb
+.npmrc
+.npmignore
+.npmignore
