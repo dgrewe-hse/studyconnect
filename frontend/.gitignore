@@ -12,6 +12,16 @@ dist
 dist-ssr
 *.local
 
+# Cypress
+cypress/videos
+cypress/screenshots
+cypress/downloads
+
+# Selenium
+selenium/node_modules
+selenium/screenshots
+selenium/logs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

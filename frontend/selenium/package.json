@@ -1,0 +1,20 @@
+{
+  "name": "studyconnect-selenium-tests",
+  "version": "1.0.0",
+  "description": "Selenium WebDriver tests for StudyConnect frontend",
+  "type": "module",
+  "scripts": {
+    "test": "node run-tests.js",
+    "test:ui": "node run-tests.js --suite ui",
+    "test:login": "node run-tests.js --suite login",
+    "test:navigation": "node run-tests.js --suite navigation",
+    "test:dashboard": "node run-tests.js --suite dashboard"
+  },
+  "dependencies": {
+    "selenium-webdriver": "^4.15.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
+  }
+}
+
