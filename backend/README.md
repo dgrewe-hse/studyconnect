@@ -105,6 +105,40 @@ Run tests with:
 mvn test
 ```
 
+## Performance Tests (Gatling & JMeter)
+
+The backend includes basic performance tests for the Task REST API using **Gatling** and **Apache JMeter**, both wired into the Maven `verify` phase.
+
+- **Gatling**:
+  - Simulation class: `de.hse.swt.studyconnect.performance.TaskApiSimulation`
+  - Targets:
+    - `GET /api/v1/tasks`
+    - `POST /api/v1/tasks`
+  - Default configuration:
+    - Base URL: `http://localhost:8080`
+    - User header: `X-User-Id: 1`
+  - Override base URL and user id if needed:
+    ```bash
+    mvn verify -DtargetUrl=http://localhost:8080 -DuserId=1
+    ```
+  - Reports:
+    - Generated under `target/gatling/*/index.html`
+
+- **JMeter**:
+  - Test plan file: `src/test/jmeter/task-api-load-test.jmx`
+  - Simulates 50 users over 30s ramp-up with a 60s duration
+  - Exercises:
+    - `GET /api/v1/tasks`
+    - `POST /api/v1/tasks`
+  - Reports:
+    - Raw results and HTML reports under `target/jmeter/results`
+
+To execute all performance tests together (assuming the backend is already running on the configured URL):
+
+```bash
+mvn verify
+```
+
 ## Development
 
 ### Adding New Features
