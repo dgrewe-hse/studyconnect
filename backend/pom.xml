@@ -28,6 +28,13 @@
         <jacoco.version>0.8.11</jacoco.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <!-- Performance testing tool versions (aligned with Gatling demo POM) -->
+        <gatling.version>3.14.9</gatling.version>
+        <gatling-maven-plugin.version>4.20.16</gatling-maven-plugin.version>
+        <jmeter.maven.plugin.version>3.8.0</jmeter.maven.plugin.version>
+        <!-- By default, skip Gatling execution so regular builds succeed even if the runtime JDK is incompatible.
+             Run with -Dgatling.skip=false to actually execute Gatling simulations. -->
+        <gatling.skip>true</gatling.skip>
     </properties>
     <dependencies>
         <!-- Spring Boot Starters -->
@@ -138,6 +145,14 @@
             <version>1.10.3</version>
             <scope>test</scope>
         </dependency>
+        <!-- Gatling performance testing (Java DSL + charts).
+             The Java DSL and core modules are pulled transitively from this dependency. -->
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -196,6 +211,64 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.11.0.3922</version>
+            </plugin>
+            <!-- Gatling Maven Plugin for performance tests -->
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>gatling-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--
+                      Allow overriding the target URL and user id from the command line, e.g.:
+                      mvn verify -DtargetUrl=http://localhost:8081 -DuserId=2
+                    -->
+                    <!-- Skip Gatling by default so normal CI builds don't fail on environment issues (e.g. JDK/Netty mismatch). -->
+                    <skip>${gatling.skip}</skip>
+                    <systemProperties>
+                        <targetUrl>${targetUrl}</targetUrl>
+                        <userId>${userId}</userId>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <!-- Apache JMeter Maven Plugin for performance tests -->
+            <plugin>
+                <groupId>com.lazerycode.jmeter</groupId>
+                <artifactId>jmeter-maven-plugin</artifactId>
+                <version>${jmeter.maven.plugin.version}</version>
+                <executions>
+                    <!-- Prepare JMeter configuration (creates target/config.json) -->
+                    <execution>
+                        <id>configuration</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>configure</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jmeter-tests</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jmeter</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Directory containing JMeter .jmx test plans -->
+                    <testFilesDirectory>src/test/jmeter</testFilesDirectory>
+                    <!-- Where raw JTL results and HTML reports will be written -->
+                    <resultsDirectory>target/jmeter/results</resultsDirectory>
+                    <generateReports>true</generateReports>
+                    <reportPostfix>report</reportPostfix>
+                </configuration>
             </plugin>
         </plugins>
     </build>
